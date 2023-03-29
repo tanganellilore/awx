@@ -148,6 +148,16 @@ register(
     placeholder=['username', 'email'],
 )
 
+register(
+    'SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL',
+    field_class=fields.BooleanField,
+    default=False,
+    label=_('Use Email address for usernames'),
+    help_text=_('Enabling this setting will tell social auth to use the full Email as username instead of the full name'),
+    category=_('Authentication'),
+    category_slug='authentication',
+)
+
 ###############################################################################
 # LDAP AUTHENTICATION SETTINGS
 ###############################################################################
@@ -1258,7 +1268,7 @@ register(
     field_class=fields.BooleanField,
     default=True,
     label=_('Verify OIDC Provider Certificate'),
-    help_text=_('Verify the OIDV provider ssl certificate.'),
+    help_text=_('Verify the OIDC provider ssl certificate.'),
     category=_('Generic OIDC'),
     category_slug='oidc',
 )

@@ -186,7 +186,6 @@ def run_until_complete(node, timing_data=None, **kwargs):
     stdout = ''
 
     try:
-
         resultfile = receptor_ctl.get_work_results(unit_id)
 
         while run_timing < 20.0:
@@ -206,7 +205,6 @@ def run_until_complete(node, timing_data=None, **kwargs):
         stdout = str(stdout, encoding='utf-8')
 
     finally:
-
         if settings.RECEPTOR_RELEASE_WORK:
             res = receptor_ctl.simple_command(f"work release {unit_id}")
             if res != {'released': unit_id}:
@@ -527,6 +525,10 @@ class AWXReceptorJob:
 
         pod_spec['spec']['containers'][0]['image'] = ee.image
         pod_spec['spec']['containers'][0]['args'] = ['ansible-runner', 'worker', '--private-data-dir=/runner']
+
+        if settings.AWX_RUNNER_KEEPALIVE_SECONDS:
+            pod_spec['spec']['containers'][0].setdefault('env', [])
+            pod_spec['spec']['containers'][0]['env'].append({'name': 'ANSIBLE_RUNNER_KEEPALIVE_SECONDS', 'value': str(settings.AWX_RUNNER_KEEPALIVE_SECONDS)})
 
         # Enforce EE Pull Policy
         pull_options = {"always": "Always", "missing": "IfNotPresent", "never": "Never"}

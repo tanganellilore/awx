@@ -36,7 +36,6 @@ SettingCategory = collections.namedtuple('SettingCategory', ('url', 'slug', 'nam
 
 
 class SettingCategoryList(ListAPIView):
-
     model = Setting  # Not exactly, but needed for the view.
     serializer_class = SettingCategorySerializer
     filter_backends = []
@@ -58,7 +57,6 @@ class SettingCategoryList(ListAPIView):
 
 
 class SettingSingletonDetail(RetrieveUpdateDestroyAPIView):
-
     model = Setting  # Not exactly, but needed for the view.
     serializer_class = SettingSingletonSerializer
     filter_backends = []
@@ -146,7 +144,6 @@ class SettingSingletonDetail(RetrieveUpdateDestroyAPIView):
 
 
 class SettingLoggingTest(GenericAPIView):
-
     name = _('Logging Connectivity Test')
     model = Setting
     serializer_class = SettingSingletonSerializer
@@ -183,7 +180,7 @@ class SettingLoggingTest(GenericAPIView):
             if not port:
                 return Response({'error': 'Port required for ' + protocol}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            # if http/https by this point, domain is reacheable
+            # if http/https by this point, domain is reachable
             return Response(status=status.HTTP_202_ACCEPTED)
 
         if protocol == 'udp':

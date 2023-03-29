@@ -155,12 +155,11 @@ class FieldLookupBackend(BaseFilterBackend):
         'search',
     )
 
-    # A list of fields that we know can be filtered on without the possiblity
+    # A list of fields that we know can be filtered on without the possibility
     # of introducing duplicates
     NO_DUPLICATES_ALLOW_LIST = (CharField, IntegerField, BooleanField, TextField)
 
     def get_fields_from_lookup(self, model, lookup):
-
         if '__' in lookup and lookup.rsplit('__', 1)[-1] in self.SUPPORTED_LOOKUPS:
             path, suffix = lookup.rsplit('__', 1)
         else:
@@ -269,7 +268,7 @@ class FieldLookupBackend(BaseFilterBackend):
                     continue
 
                 # HACK: make `created` available via API for the Django User ORM model
-                # so it keep compatiblity with other objects which exposes the `created` attr.
+                # so it keep compatibility with other objects which exposes the `created` attr.
                 if queryset.model._meta.object_name == 'User' and key.startswith('created'):
                     key = key.replace('created', 'date_joined')
 
