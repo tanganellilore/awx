@@ -38,12 +38,9 @@ EXPORTABLE_RELATIONS = ['Roles', 'NotificationTemplates', 'WorkflowJobTemplateNo
 DEPENDENT_EXPORT = [
     ('JobTemplate', 'Label'),
     ('JobTemplate', 'SurveySpec'),
-    ('JobTemplate', 'Schedule'),
     ('WorkflowJobTemplate', 'Label'),
     ('WorkflowJobTemplate', 'SurveySpec'),
-    ('WorkflowJobTemplate', 'Schedule'),
     ('WorkflowJobTemplate', 'WorkflowJobTemplateNode'),
-    ('InventorySource', 'Schedule'),
     ('Inventory', 'Group'),
     ('Inventory', 'Host'),
     ('Inventory', 'Label'),
@@ -66,6 +63,7 @@ DEPENDENT_NONEXPORT = [
 
 
 class Api(base.Base):
+
     pass
 
 
@@ -73,6 +71,7 @@ page.register_page(resources.api, Api)
 
 
 class ApiV2(base.Base):
+
     # Export methods
 
     def _export(self, _page, post_fields):

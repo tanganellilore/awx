@@ -10,6 +10,7 @@ from awx.api.versioning import reverse
 @pytest.fixture
 def ldap_generator():
     def fn(fname, host='localhost'):
+
         fh = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), fname), 'rb')
         ctrl = ldif.LDIFRecordList(fh)
         ctrl.parse()

@@ -12,6 +12,7 @@ def forwards(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0163_convert_job_tags_to_textfield'),
     ]

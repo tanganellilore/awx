@@ -30,15 +30,7 @@ from awx.api.views import (
     OAuth2TokenList,
     ApplicationOAuth2TokenList,
     OAuth2ApplicationDetail,
-    # HostMetricSummaryMonthlyList, # It will be enabled in future version of the AWX
 )
-
-from awx.api.views.bulk import (
-    BulkView,
-    BulkHostCreateView,
-    BulkJobLaunchView,
-)
-
 from awx.api.views.mesh_visualizer import MeshVisualizer
 
 from awx.api.views.metrics import MetricsView
@@ -47,11 +39,10 @@ from .organization import urls as organization_urls
 from .user import urls as user_urls
 from .project import urls as project_urls
 from .project_update import urls as project_update_urls
-from .inventory import urls as inventory_urls, constructed_inventory_urls
+from .inventory import urls as inventory_urls
 from .execution_environments import urls as execution_environment_urls
 from .team import urls as team_urls
 from .host import urls as host_urls
-from .host_metric import urls as host_metric_urls
 from .group import urls as group_urls
 from .inventory_source import urls as inventory_source_urls
 from .inventory_update import urls as inventory_update_urls
@@ -119,11 +110,7 @@ v2_urls = [
     re_path(r'^project_updates/', include(project_update_urls)),
     re_path(r'^teams/', include(team_urls)),
     re_path(r'^inventories/', include(inventory_urls)),
-    re_path(r'^constructed_inventories/', include(constructed_inventory_urls)),
     re_path(r'^hosts/', include(host_urls)),
-    re_path(r'^host_metrics/', include(host_metric_urls)),
-    # It will be enabled in future version of the AWX
-    # re_path(r'^host_metric_summary_monthly/$', HostMetricSummaryMonthlyList.as_view(), name='host_metric_summary_monthly_list'),
     re_path(r'^groups/', include(group_urls)),
     re_path(r'^inventory_sources/', include(inventory_source_urls)),
     re_path(r'^inventory_updates/', include(inventory_update_urls)),
@@ -149,9 +136,6 @@ v2_urls = [
     re_path(r'^activity_stream/', include(activity_stream_urls)),
     re_path(r'^workflow_approval_templates/', include(workflow_approval_template_urls)),
     re_path(r'^workflow_approvals/', include(workflow_approval_urls)),
-    re_path(r'^bulk/$', BulkView.as_view(), name='bulk'),
-    re_path(r'^bulk/host_create/$', BulkHostCreateView.as_view(), name='bulk_host_create'),
-    re_path(r'^bulk/job_launch/$', BulkJobLaunchView.as_view(), name='bulk_job_launch'),
 ]
 
 

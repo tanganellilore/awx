@@ -9,6 +9,7 @@ from awx.main.migrations import _credentialtypes as credentialtypes
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0056_v350_custom_venv_history'),
     ]

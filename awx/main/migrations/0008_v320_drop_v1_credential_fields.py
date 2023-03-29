@@ -11,6 +11,7 @@ import awx.main.fields
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0007_v320_data_migrations'),
     ]

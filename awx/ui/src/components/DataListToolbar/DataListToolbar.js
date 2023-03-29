@@ -57,7 +57,6 @@ function DataListToolbar({
   enableRelatedFuzzyFiltering,
   handleIsAnsibleFactsSelected,
   isFilterCleared,
-  advancedSearchDisabled,
 }) {
   const showExpandCollapse = onCompact && onExpand;
   const [isKebabOpen, setIsKebabOpen] = useState(false);
@@ -87,10 +86,6 @@ function DataListToolbar({
     }),
     [setIsKebabModalOpen]
   );
-  const columns = [...searchColumns];
-  if (!advancedSearchDisabled) {
-    columns.push({ name: t`Advanced`, key: 'advanced' });
-  }
   return (
     <Toolbar
       id={`${qsConfig.namespace}-list-toolbar`}
@@ -139,7 +134,10 @@ function DataListToolbar({
           <ToolbarItem>
             <Search
               qsConfig={qsConfig}
-              columns={columns}
+              columns={[
+                ...searchColumns,
+                { name: t`Advanced`, key: 'advanced' },
+              ]}
               searchableKeys={searchableKeys}
               relatedSearchableKeys={relatedSearchableKeys}
               onSearch={onSearch}
@@ -226,7 +224,6 @@ DataListToolbar.propTypes = {
   additionalControls: PropTypes.arrayOf(PropTypes.node),
   enableNegativeFiltering: PropTypes.bool,
   enableRelatedFuzzyFiltering: PropTypes.bool,
-  advancedSearchDisabled: PropTypes.bool,
 };
 
 DataListToolbar.defaultProps = {
@@ -246,7 +243,6 @@ DataListToolbar.defaultProps = {
   additionalControls: [],
   enableNegativeFiltering: true,
   enableRelatedFuzzyFiltering: true,
-  advancedSearchDisabled: false,
 };
 
 export default DataListToolbar;

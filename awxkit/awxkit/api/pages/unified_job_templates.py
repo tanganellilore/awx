@@ -75,6 +75,7 @@ page.register_page(resources.unified_job_template, UnifiedJobTemplate)
 
 
 class UnifiedJobTemplates(page.PageList, UnifiedJobTemplate):
+
     pass
 
 

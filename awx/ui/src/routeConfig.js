@@ -23,7 +23,6 @@ import TopologyView from 'screens/TopologyView';
 import Users from 'screens/User';
 import WorkflowApprovals from 'screens/WorkflowApproval';
 import { Jobs } from 'screens/Job';
-import HostMetrics from 'screens/HostMetrics';
 
 function getRouteConfig(userProfile = {}) {
   let routeConfig = [
@@ -55,11 +54,6 @@ function getRouteConfig(userProfile = {}) {
           title: <Trans>Workflow Approvals</Trans>,
           path: '/workflow_approvals',
           screen: WorkflowApprovals,
-        },
-        {
-          title: <Trans>Host Metrics</Trans>,
-          path: '/host_metrics',
-          screen: HostMetrics,
         },
       ],
     },
@@ -184,18 +178,13 @@ function getRouteConfig(userProfile = {}) {
   const deleteRouteGroup = (name) => {
     routeConfig = routeConfig.filter(({ groupId }) => !groupId.includes(name));
   };
-  if (
-    userProfile?.systemConfig?.SUBSCRIPTION_USAGE_MODEL !==
-    'unique_managed_hosts'
-  ) {
-    deleteRoute('host_metrics');
-  }
+
   if (userProfile?.isSuperUser || userProfile?.isSystemAuditor)
     return routeConfig;
-  deleteRoute('host_metrics');
   deleteRouteGroup('settings');
   deleteRoute('management_jobs');
   if (userProfile?.isOrgAdmin) return routeConfig;
+  deleteRoute('instance_groups');
   deleteRoute('topology_view');
   deleteRoute('instances');
   if (!userProfile?.isNotificationAdmin) deleteRoute('notification_templates');

@@ -4,6 +4,7 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0105_v370_remove_jobevent_parent_and_hosts'),
     ]

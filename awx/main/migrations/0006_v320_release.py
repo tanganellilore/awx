@@ -26,6 +26,7 @@ def replaces():
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0005_squashed_v310_v313_updates'),
     ]

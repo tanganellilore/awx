@@ -7,6 +7,7 @@ from awx.main.migrations import ActivityStreamDisabledMigration
 
 
 class Migration(ActivityStreamDisabledMigration):
+
     dependencies = [
         ('main', '0006_v320_release'),
     ]

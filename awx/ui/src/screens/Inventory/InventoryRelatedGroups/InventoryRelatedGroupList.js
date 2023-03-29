@@ -33,7 +33,7 @@ function InventoryRelatedGroupList() {
   const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
   const [associateError, setAssociateError] = useState(null);
   const [disassociateError, setDisassociateError] = useState(null);
-  const { id: inventoryId, groupId, inventoryType } = useParams();
+  const { id: inventoryId, groupId } = useParams();
   const location = useLocation();
 
   const {
@@ -69,10 +69,9 @@ function InventoryRelatedGroupList() {
         searchableKeys: getSearchableKeys(actions.data.actions?.GET),
         canAdd:
           actions.data.actions &&
-          Object.prototype.hasOwnProperty.call(actions.data.actions, 'POST') &&
-          inventoryType !== 'constructed_inventory',
+          Object.prototype.hasOwnProperty.call(actions.data.actions, 'POST'),
       };
-    }, [groupId, location.search, inventoryType, inventoryId]),
+    }, [groupId, location.search, inventoryId]),
     {
       groups: [],
       itemCount: 0,
@@ -165,7 +164,7 @@ function InventoryRelatedGroupList() {
       ]}
     />
   );
-  const isNotConstructedInventory = inventoryType !== 'constructed_inventory';
+
   return (
     <>
       <PaginatedTable
@@ -219,23 +218,19 @@ function InventoryRelatedGroupList() {
                     />,
                   ]
                 : []),
-              ...(isNotConstructedInventory
-                ? [
-                    <DisassociateButton
-                      key="disassociate"
-                      onDisassociate={disassociateGroups}
-                      itemsToDisassociate={selected}
-                      modalTitle={t`Disassociate related group(s)?`}
-                    />,
-                  ]
-                : []),
+              <DisassociateButton
+                key="disassociate"
+                onDisassociate={disassociateGroups}
+                itemsToDisassociate={selected}
+                modalTitle={t`Disassociate related group(s)?`}
+              />,
             ]}
           />
         )}
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG}>
             <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-            {isNotConstructedInventory && <HeaderCell>{t`Actions`}</HeaderCell>}
+            <HeaderCell>{t`Actions`}</HeaderCell>
           </HeaderRow>
         }
         renderRow={(group, index) => (

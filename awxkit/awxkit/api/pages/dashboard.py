@@ -4,6 +4,7 @@ from . import page
 
 
 class Dashboard(base.Base):
+
     pass
 
 

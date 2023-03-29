@@ -15,6 +15,7 @@ def update_cyberark_aim_name(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0097_v360_workflowapproval_approved_or_denied_by'),
     ]

@@ -210,6 +210,7 @@ def test_associate_label(label, user, job_template):
 
 @pytest.mark.django_db
 class TestJobTemplateSchedules:
+
     rrule = 'DTSTART:20151117T050000Z RRULE:FREQ=DAILY;INTERVAL=1;COUNT=1'
     rrule2 = 'DTSTART:20151117T050000Z RRULE:FREQ=WEEKLY;INTERVAL=1;COUNT=1'
 

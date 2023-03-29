@@ -38,6 +38,7 @@ class SettingsCacheMiddleware(MiddlewareMixin):
 
 
 class TimingMiddleware(threading.local, MiddlewareMixin):
+
     dest = '/var/log/tower/profile'
 
     def __init__(self, *args, **kwargs):

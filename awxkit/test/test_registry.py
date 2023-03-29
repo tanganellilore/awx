@@ -4,10 +4,12 @@ from awxkit.api.registry import URLRegistry
 
 
 class One(object):
+
     pass
 
 
 class Two(object):
+
     pass
 
 

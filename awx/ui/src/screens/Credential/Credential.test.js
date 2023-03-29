@@ -8,7 +8,6 @@ import {
 } from '../../../testUtils/enzymeHelpers';
 import mockMachineCredential from './shared/data.machineCredential.json';
 import mockSCMCredential from './shared/data.scmCredential.json';
-import mockCyberArkCredential from './shared/data.cyberArkCredential.json';
 import Credential from './Credential';
 
 jest.mock('../../api');
@@ -22,11 +21,6 @@ jest.mock('react-router-dom', () => ({
 
 describe('<Credential />', () => {
   let wrapper;
-  afterEach(() => {
-    jest.clearAllMocks();
-
-    wrapper.unmount();
-  });
 
   test('initially renders user-based machine credential successfully', async () => {
     CredentialsAPI.readDetail.mockResolvedValueOnce({
@@ -67,19 +61,6 @@ describe('<Credential />', () => {
     });
   });
 
-  test('should not render job template tab', async () => {
-    CredentialsAPI.readDetail.mockResolvedValueOnce({
-      data: { ...mockCyberArkCredential, kind: 'registry' },
-    });
-    const expectedTabs = ['Back to Credentials', 'Details', 'Access'];
-    await act(async () => {
-      wrapper = mountWithContexts(<Credential setBreadcrumb={() => {}} />);
-    });
-    wrapper.find('RoutedTabs li').forEach((tab, index) => {
-      expect(tab.text()).toEqual(expectedTabs[index]);
-    });
-  });
-
   test('should show content error when user attempts to navigate to erroneous route', async () => {
     const history = createMemoryHistory({
       initialEntries: ['/credentials/2/foobar'],
@@ -104,4 +85,3 @@ describe('<Credential />', () => {
     await waitForElement(wrapper, 'ContentError', (el) => el.length === 1);
   });
 });
-describe('<Credential> should not show job template tab', () => {});

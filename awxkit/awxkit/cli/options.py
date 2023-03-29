@@ -74,6 +74,7 @@ class JsonDumpsAction(argparse.Action):
 
 
 class ResourceOptionsParser(object):
+
     deprecated = False
 
     def __init__(self, v2, page, resource, parser):
@@ -163,10 +164,7 @@ class ResourceOptionsParser(object):
             if method == 'list' and param.get('filterable') is False:
                 continue
 
-            def list_of_json_or_yaml(v):
-                return json_or_yaml(v, expected_type=list)
-
-            def json_or_yaml(v, expected_type=dict):
+            def json_or_yaml(v):
                 if v.startswith('@'):
                     v = open(os.path.expanduser(v[1:])).read()
                 try:
@@ -177,16 +175,15 @@ class ResourceOptionsParser(object):
                     except Exception:
                         raise argparse.ArgumentTypeError("{} is not valid JSON or YAML".format(v))
 
-                if not isinstance(parsed, expected_type):
+                if not isinstance(parsed, dict):
                     raise argparse.ArgumentTypeError("{} is not valid JSON or YAML".format(v))
 
-                if expected_type is dict:
-                    for k, v in parsed.items():
-                        # add support for file reading at top-level JSON keys
-                        # (to make things like SSH key data easier to work with)
-                        if isinstance(v, str) and v.startswith('@'):
-                            path = os.path.expanduser(v[1:])
-                            parsed[k] = open(path).read()
+                for k, v in parsed.items():
+                    # add support for file reading at top-level JSON keys
+                    # (to make things like SSH key data easier to work with)
+                    if isinstance(v, str) and v.startswith('@'):
+                        path = os.path.expanduser(v[1:])
+                        parsed[k] = open(path).read()
 
                 return parsed
 
@@ -261,19 +258,6 @@ class ResourceOptionsParser(object):
 
                 if k == 'extra_vars':
                     args.append('-e')
-
-            # special handling for bulk endpoints
-            if self.resource == 'bulk':
-                if method == "host_create":
-                    if k == "inventory":
-                        kwargs['required'] = required = True
-                    if k == 'hosts':
-                        kwargs['type'] = list_of_json_or_yaml
-                        kwargs['required'] = required = True
-                if method == "job_launch":
-                    if k == 'jobs':
-                        kwargs['type'] = list_of_json_or_yaml
-                        kwargs['required'] = required = True
 
             if required:
                 if required_group is None:

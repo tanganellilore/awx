@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { t } from '@lingui/macro';
-import { useHistory, useParams } from 'react-router-dom';
+
 import { Button } from '@patternfly/react-core';
 
+import { useHistory, useParams } from 'react-router-dom';
 import { VariablesDetail } from 'components/CodeEditor';
 import { CardBody, CardActionsRow } from 'components/Card';
 import ErrorDetail from 'components/ErrorDetail';
@@ -11,7 +12,6 @@ import { DetailList, Detail, UserDateDetail } from 'components/DetailList';
 import InventoryGroupsDeleteModal from '../shared/InventoryGroupsDeleteModal';
 
 function InventoryGroupDetail({ inventoryGroup }) {
-  const { inventoryType, id, groupId } = useParams();
   const {
     summary_fields: { created_by, modified_by, user_capabilities },
     created,
@@ -22,6 +22,7 @@ function InventoryGroupDetail({ inventoryGroup }) {
   } = inventoryGroup;
   const [error, setError] = useState(false);
   const history = useHistory();
+  const params = useParams();
 
   return (
     <CardBody>
@@ -46,33 +47,31 @@ function InventoryGroupDetail({ inventoryGroup }) {
           user={modified_by}
         />
       </DetailList>
-      {inventoryType !== 'constructed_inventory' && (
-        <CardActionsRow>
-          {user_capabilities?.edit && (
-            <Button
-              ouiaId="inventory-group-detail-edit-button"
-              variant="primary"
-              aria-label={t`Edit`}
-              onClick={() =>
-                history.push(
-                  `/inventories/inventory/${id}/groups/${groupId}/edit`
-                )
-              }
-            >
-              {t`Edit`}
-            </Button>
-          )}
-          {user_capabilities?.delete && (
-            <InventoryGroupsDeleteModal
-              groups={[inventoryGroup]}
-              isDisabled={false}
-              onAfterDelete={() =>
-                history.push(`/inventories/inventory/${id}/groups`)
-              }
-            />
-          )}
-        </CardActionsRow>
-      )}
+      <CardActionsRow>
+        {user_capabilities?.edit && (
+          <Button
+            ouiaId="inventory-group-detail-edit-button"
+            variant="primary"
+            aria-label={t`Edit`}
+            onClick={() =>
+              history.push(
+                `/inventories/inventory/${params.id}/groups/${params.groupId}/edit`
+              )
+            }
+          >
+            {t`Edit`}
+          </Button>
+        )}
+        {user_capabilities?.delete && (
+          <InventoryGroupsDeleteModal
+            groups={[inventoryGroup]}
+            isDisabled={false}
+            onAfterDelete={() =>
+              history.push(`/inventories/inventory/${params.id}/groups`)
+            }
+          />
+        )}
+      </CardActionsRow>
       {error && (
         <AlertModal
           variant="error"

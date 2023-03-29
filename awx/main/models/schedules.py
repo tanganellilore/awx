@@ -54,6 +54,7 @@ class ScheduleQuerySet(ScheduleFilterMethods, QuerySet):
 
 
 class ScheduleManager(ScheduleFilterMethods, models.Manager):
+
     use_for_related_objects = True
 
     def get_queryset(self):

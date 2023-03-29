@@ -66,6 +66,7 @@ class task:
         bind_kwargs = self.bind_kwargs
 
         class PublisherMixin(object):
+
             queue = None
 
             @classmethod

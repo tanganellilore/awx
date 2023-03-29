@@ -8,6 +8,7 @@ from awx.main.utils.common import set_current_apps
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0079_v360_rm_implicit_oauth2_apps'),
     ]

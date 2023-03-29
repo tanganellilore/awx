@@ -10,6 +10,7 @@ from django.utils.text import slugify
 
 
 class Command(BaseCommand):
+
     help = 'Export custom inventory scripts into a tarfile.'
 
     def add_arguments(self, parser):
@@ -20,6 +21,7 @@ class Command(BaseCommand):
 
         with tempfile.TemporaryDirectory() as tmpdirname:
             with tarfile.open(tar_filename, "w") as tar:
+
                 for cis in CustomInventoryScript.objects.all():
                     # naming convention similar to project paths
                     slug_name = slugify(str(cis.name)).replace(u'-', u'_')

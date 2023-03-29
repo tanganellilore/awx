@@ -4,6 +4,7 @@ from . import page
 
 
 class Ping(base.Base):
+
     pass
 
 

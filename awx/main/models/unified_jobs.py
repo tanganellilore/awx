@@ -1129,6 +1129,7 @@ class UnifiedJob(
             # (`stdout`) directly to a file
 
             with connection.cursor() as cursor:
+
                 if enforce_max_bytes:
                     # detect the length of all stdout for this UnifiedJob, and
                     # if it exceeds settings.STDOUT_MAX_BYTES_DISPLAY bytes,

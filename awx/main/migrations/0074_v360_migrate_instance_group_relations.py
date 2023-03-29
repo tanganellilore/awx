@@ -28,6 +28,7 @@ def create_through_relations(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0073_v360_create_instance_group_m2m'),
     ]

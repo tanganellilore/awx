@@ -29,7 +29,6 @@ def create_roles(apps, schema_editor):
             'Project',
             'Credential',
             'JobTemplate',
-            'InstanceGroup',
         ]
     ]
 

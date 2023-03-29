@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { bool, func } from 'prop-types';
+import { string, bool, func } from 'prop-types';
 
 import { Button, Label } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -12,7 +12,6 @@ import { Inventory } from 'types';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import CopyButton from 'components/CopyButton';
 import StatusLabel from 'components/StatusLabel';
-import { getInventoryPath } from '../shared/utils';
 
 function InventoryListItem({
   inventory,
@@ -20,10 +19,12 @@ function InventoryListItem({
   isSelected,
   onSelect,
   onCopy,
+  detailUrl,
   fetchInventories,
 }) {
   InventoryListItem.propTypes = {
     inventory: Inventory.isRequired,
+    detailUrl: string.isRequired,
     isSelected: bool.isRequired,
     onSelect: func.isRequired,
   };
@@ -48,12 +49,6 @@ function InventoryListItem({
   }, []);
 
   const labelId = `check-action-${inventory.id}`;
-
-  const typeLabel = {
-    '': t`Inventory`,
-    smart: t`Smart Inventory`,
-    constructed: t`Constructed Inventory`,
-  };
 
   let syncStatus = 'disabled';
   if (inventory.isSourceSyncRunning) {
@@ -98,20 +93,16 @@ function InventoryListItem({
         {inventory.pending_deletion ? (
           <b>{inventory.name}</b>
         ) : (
-          <Link to={`${getInventoryPath(inventory)}/details`}>
+          <Link to={`${detailUrl}`}>
             <b>{inventory.name}</b>
           </Link>
         )}
       </TdBreakWord>
       <Td dataLabel={t`Status`}>
-        {inventory.kind === '' &&
+        {inventory.kind !== 'smart' &&
           (inventory.has_inventory_sources ? (
             <Link
-              to={`${getInventoryPath(
-                inventory
-              )}/jobs?job.or__inventoryupdate__inventory_source__inventory__id=${
-                inventory.id
-              }`}
+              to={`/inventories/inventory/${inventory.id}/jobs?job.or__inventoryupdate__inventory_source__inventory__id=${inventory.id}`}
             >
               <StatusLabel
                 status={syncStatus}
@@ -122,7 +113,9 @@ function InventoryListItem({
             <StatusLabel status={syncStatus} tooltipContent={tooltipContent} />
           ))}
       </Td>
-      <Td dataLabel={t`Type`}>{typeLabel[inventory.kind]}</Td>
+      <Td dataLabel={t`Type`}>
+        {inventory.kind === 'smart' ? t`Smart Inventory` : t`Inventory`}
+      </Td>
       <TdBreakWord key="organization" dataLabel={t`Organization`}>
         <Link
           to={`/organizations/${inventory?.summary_fields?.organization?.id}/details`}
@@ -146,7 +139,9 @@ function InventoryListItem({
               aria-label={t`Edit Inventory`}
               variant="plain"
               component={Link}
-              to={`${getInventoryPath(inventory)}/edit`}
+              to={`/inventories/${
+                inventory.kind === 'smart' ? 'smart_inventory' : 'inventory'
+              }/${inventory.id}/edit`}
             >
               <PencilAltIcon />
             </Button>

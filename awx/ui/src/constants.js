@@ -1,3 +1,4 @@
+/* eslint-disable-next-line import/prefer-default-export */
 export const JOB_TYPE_URL_SEGMENTS = {
   job: 'playbook',
   project_update: 'project',

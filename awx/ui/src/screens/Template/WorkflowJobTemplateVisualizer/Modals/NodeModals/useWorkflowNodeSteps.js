@@ -66,13 +66,7 @@ const getNodeToEditDefaultValues = (
     // There is a case where the nodeToEdit convergence value will not align with the
     // original node object value.  This allows the nodeToEdit value to take precedence over the
     // original node object.
-    if (
-      nodeToEdit &&
-      Object.prototype.hasOwnProperty.call(
-        nodeToEdit,
-        'all_parents_must_converge'
-      )
-    ) {
+    if (nodeToEdit) {
       return nodeToEdit.all_parents_must_converge ? 'all' : 'any';
     }
     return nodeToEdit?.originalNodeObject?.all_parents_must_converge

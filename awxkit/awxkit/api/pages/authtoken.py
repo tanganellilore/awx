@@ -4,6 +4,7 @@ from . import page
 
 
 class AuthToken(base.Base):
+
     pass
 
 

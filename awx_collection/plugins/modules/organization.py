@@ -47,6 +47,7 @@ options:
     max_hosts:
       description:
         - The max hosts allowed in this organizations
+      default: "0"
       type: int
     state:
       description:
@@ -123,7 +124,7 @@ def main():
         description=dict(),
         default_environment=dict(),
         custom_virtualenv=dict(),
-        max_hosts=dict(type='int'),
+        max_hosts=dict(type='int', default="0"),
         instance_groups=dict(type="list", elements='str'),
         notification_templates_started=dict(type="list", elements='str'),
         notification_templates_success=dict(type="list", elements='str'),

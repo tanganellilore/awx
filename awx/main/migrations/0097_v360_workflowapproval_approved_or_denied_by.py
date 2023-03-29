@@ -6,6 +6,7 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('main', '0096_v360_container_groups'),

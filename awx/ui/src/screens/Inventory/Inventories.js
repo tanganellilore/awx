@@ -9,18 +9,14 @@ import PersistentFilters from 'components/PersistentFilters';
 import { InventoryList } from './InventoryList';
 import Inventory from './Inventory';
 import SmartInventory from './SmartInventory';
-import ConstructedInventory from './ConstructedInventory';
 import InventoryAdd from './InventoryAdd';
 import SmartInventoryAdd from './SmartInventoryAdd';
-import ConstructedInventoryAdd from './ConstructedInventoryAdd';
-import { getInventoryPath } from './shared/utils';
 
 function Inventories() {
   const initScreenHeader = useRef({
     '/inventories': t`Inventories`,
     '/inventories/inventory/add': t`Create new inventory`,
     '/inventories/smart_inventory/add': t`Create new smart inventory`,
-    '/inventories/constructed_inventory/add': t`Create new constructed inventory`,
   });
 
   const [breadcrumbConfig, setScreenHeader] = useState(
@@ -49,7 +45,10 @@ function Inventories() {
         return;
       }
 
-      const inventoryPath = getInventoryPath(inventory);
+      const inventoryKind =
+        inventory.kind === 'smart' ? 'smart_inventory' : 'inventory';
+
+      const inventoryPath = `/inventories/${inventoryKind}/${inventory.id}`;
       const inventoryHostsPath = `${inventoryPath}/hosts`;
       const inventoryGroupsPath = `${inventoryPath}/groups`;
       const inventorySourcesPath = `${inventoryPath}/sources`;
@@ -110,9 +109,6 @@ function Inventories() {
         <Route path="/inventories/smart_inventory/add">
           <SmartInventoryAdd />
         </Route>
-        <Route path="/inventories/constructed_inventory/add">
-          <ConstructedInventoryAdd />
-        </Route>
         <Route path="/inventories/inventory/:id">
           <Config>
             {({ me }) => (
@@ -122,9 +118,6 @@ function Inventories() {
         </Route>
         <Route path="/inventories/smart_inventory/:id">
           <SmartInventory setBreadcrumb={setBreadcrumbConfig} />
-        </Route>
-        <Route path="/inventories/constructed_inventory/:id">
-          <ConstructedInventory setBreadcrumb={setBreadcrumbConfig} />
         </Route>
         <Route path="/inventories">
           <PersistentFilters pageKey="inventories">

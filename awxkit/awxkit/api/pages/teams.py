@@ -11,6 +11,7 @@ from . import page
 
 
 class Team(HasCreate, base.Base):
+
     dependencies = [Organization]
     NATURAL_KEY = ('organization', 'name')
 
@@ -43,6 +44,7 @@ page.register_page([resources.team, (resources.teams, 'post')], Team)
 
 
 class Teams(page.PageList, Team):
+
     pass
 
 

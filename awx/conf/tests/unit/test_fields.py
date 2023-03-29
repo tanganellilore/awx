@@ -5,6 +5,7 @@ from awx.conf.fields import StringListBooleanField, StringListPathField, ListTup
 
 
 class TestStringListBooleanField:
+
     FIELD_VALUES = [
         ("hello", "hello"),
         (("a", "b"), ["a", "b"]),
@@ -52,6 +53,7 @@ class TestStringListBooleanField:
 
 
 class TestListTuplesField:
+
     FIELD_VALUES = [([('a', 'b'), ('abc', '123')], [("a", "b"), ("abc", "123")])]
 
     FIELD_VALUES_INVALID = [("abc", type("abc")), ([('a', 'b', 'c'), ('abc', '123', '456')], type(('a',))), (['a', 'b'], type('a')), (123, type(123))]
@@ -71,6 +73,7 @@ class TestListTuplesField:
 
 
 class TestStringListPathField:
+
     FIELD_VALUES = [
         ((".", "..", "/"), [".", "..", "/"]),
         (("/home",), ["/home"]),

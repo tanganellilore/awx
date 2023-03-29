@@ -75,8 +75,7 @@ In the root of awx-operator:
     -e image_version=devel \
     -e image_pull_policy=Always \
     -e service_type=nodeport \
-    -e namespace=awx \
-    -e nodeport_port=30080
+    -e namespace=awx
 ```
 Check the operator with the following commands:
 

@@ -8,6 +8,7 @@ from . import base
 
 
 class OAuth2Application(HasCreate, base.Base):
+
     dependencies = [Organization]
     NATURAL_KEY = ('organization', 'name')
 
@@ -48,6 +49,7 @@ page.register_page(resources.applications, OAuth2Applications)
 
 
 class OAuth2AccessToken(HasCreate, base.Base):
+
     optional_dependencies = [OAuth2Application]
 
     def payload(self, **kwargs):

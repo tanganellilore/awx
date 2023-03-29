@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class ConfConfig(AppConfig):
+
     name = 'awx.conf'
     verbose_name = _('Configuration')
 
@@ -15,6 +16,7 @@ class ConfConfig(AppConfig):
         self.module.autodiscover()
 
         if not set(sys.argv) & {'migrate', 'check_migrations'}:
+
             from .settings import SettingsWrapper
 
             SettingsWrapper.initialize()

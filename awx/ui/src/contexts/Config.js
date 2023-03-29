@@ -8,7 +8,6 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import { useSession } from './Session';
-import { SettingsAPI } from '../api';
 
 // eslint-disable-next-line import/prefer-default-export
 export const ConfigContext = React.createContext({});
@@ -41,11 +40,6 @@ export const ConfigProvider = ({ children }) => {
           },
         },
       ] = await Promise.all([ConfigAPI.read(), MeAPI.read()]);
-      let systemConfig = {};
-      if (me?.is_superuser || me?.is_system_auditor) {
-        const { data: systemConfigResults } = await SettingsAPI.readSystem();
-        systemConfig = systemConfigResults;
-      }
 
       const [
         {
@@ -68,21 +62,10 @@ export const ConfigProvider = ({ children }) => {
           role_level: 'execution_environment_admin_role',
         }),
       ]);
-      return {
-        ...data,
-        me,
-        adminOrgCount,
-        notifAdminCount,
-        execEnvAdminCount,
-        systemConfig,
-      };
+
+      return { ...data, me, adminOrgCount, notifAdminCount, execEnvAdminCount };
     }, []),
-    {
-      adminOrgCount: 0,
-      notifAdminCount: 0,
-      execEnvAdminCount: 0,
-      systemConfig: {},
-    }
+    { adminOrgCount: 0, notifAdminCount: 0, execEnvAdminCount: 0 }
   );
 
   const { error, dismissError } = useDismissableError(configError);
@@ -129,7 +112,6 @@ export const useUserProfile = () => {
     isOrgAdmin: config.adminOrgCount,
     isNotificationAdmin: config.notifAdminCount,
     isExecEnvAdmin: config.execEnvAdminCount,
-    systemConfig: config.systemConfig,
   };
 };
 

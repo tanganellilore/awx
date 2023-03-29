@@ -14,6 +14,7 @@ page.register_page(resources.job, Job)
 
 
 class Jobs(page.PageList, Job):
+
     pass
 
 
@@ -21,6 +22,7 @@ page.register_page([resources.jobs, resources.job_template_jobs, resources.syste
 
 
 class JobCancel(UnifiedJob):
+
     pass
 
 
@@ -28,6 +30,7 @@ page.register_page(resources.job_cancel, JobCancel)
 
 
 class JobEvent(base.Base):
+
     pass
 
 
@@ -35,6 +38,7 @@ page.register_page([resources.job_event, resources.job_job_event], JobEvent)
 
 
 class JobEvents(page.PageList, JobEvent):
+
     pass
 
 
@@ -42,6 +46,7 @@ page.register_page([resources.job_events, resources.job_job_events, resources.jo
 
 
 class JobPlay(base.Base):
+
     pass
 
 
@@ -49,6 +54,7 @@ page.register_page(resources.job_play, JobPlay)
 
 
 class JobPlays(page.PageList, JobPlay):
+
     pass
 
 
@@ -56,6 +62,7 @@ page.register_page(resources.job_plays, JobPlays)
 
 
 class JobTask(base.Base):
+
     pass
 
 
@@ -63,6 +70,7 @@ page.register_page(resources.job_task, JobTask)
 
 
 class JobTasks(page.PageList, JobTask):
+
     pass
 
 
@@ -70,6 +78,7 @@ page.register_page(resources.job_tasks, JobTasks)
 
 
 class JobHostSummary(base.Base):
+
     pass
 
 
@@ -77,6 +86,7 @@ page.register_page(resources.job_host_summary, JobHostSummary)
 
 
 class JobHostSummaries(page.PageList, JobHostSummary):
+
     pass
 
 
@@ -84,6 +94,7 @@ page.register_page([resources.job_host_summaries, resources.group_related_job_ho
 
 
 class JobRelaunch(base.Base):
+
     pass
 
 
@@ -91,6 +102,7 @@ page.register_page(resources.job_relaunch, JobRelaunch)
 
 
 class JobStdout(base.Base):
+
     pass
 
 

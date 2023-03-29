@@ -10,6 +10,7 @@ import re
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0024_v330_create_user_session_membership'),
     ]

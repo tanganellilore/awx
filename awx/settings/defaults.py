@@ -11,13 +11,11 @@ from datetime import timedelta
 
 
 if "pytest" in sys.modules:
-    IS_TESTING_MODE = True
     from unittest import mock
 
     with mock.patch('__main__.__builtins__.dir', return_value=[]):
         import ldap
 else:
-    IS_TESTING_MODE = False
     import ldap
 
 
@@ -85,11 +83,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'ui', 'build', 'static'),
-    os.path.join(BASE_DIR, 'ui_next', 'build'),
-    os.path.join(BASE_DIR, 'static'),
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'ui', 'build', 'static'), os.path.join(BASE_DIR, 'static')]
 
 # Absolute filesystem path to the directory where static file are collected via
 # the collectstatic command.
@@ -134,13 +128,6 @@ NAMED_URL_GRAPH = {}
 # Maximum number of the same job that can be waiting to run when launching from scheduler
 # Note: This setting may be overridden by database settings.
 SCHEDULE_MAX_JOBS = 10
-
-# Bulk API related settings
-# Maximum number of jobs that can be launched in 1 bulk job
-BULK_JOB_MAX_LAUNCH = 100
-
-# Maximum number of host that can be created in 1 bulk host create
-BULK_HOST_MAX_CREATE = 100
 
 SITE_ID = 1
 
@@ -303,12 +290,7 @@ TEMPLATES = [
             ],
             'builtins': ['awx.main.templatetags.swagger'],
         },
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'ui', 'build'),
-            os.path.join(BASE_DIR, 'ui', 'public'),
-            os.path.join(BASE_DIR, 'ui_next', 'build', 'awx'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'ui', 'build'), os.path.join(BASE_DIR, 'ui', 'public')],
     },
 ]
 
@@ -760,13 +742,6 @@ CUSTOM_EXCLUDE_EMPTY_GROUPS = False
 SCM_EXCLUDE_EMPTY_GROUPS = False
 # SCM_INSTANCE_ID_VAR =
 
-# ----------------
-# -- Constructed --
-# ----------------
-CONSTRUCTED_INSTANCE_ID_VAR = 'remote_tower_id'
-
-CONSTRUCTED_EXCLUDE_EMPTY_GROUPS = False
-
 # ---------------------
 # -- Activity Stream --
 # ---------------------
@@ -954,11 +929,6 @@ AWX_RUNNER_OMIT_ENV_FILES = True
 # Allow ansible-runner to save ansible output (may cause performance issues)
 AWX_RUNNER_SUPPRESS_OUTPUT_FILE = True
 
-# https://github.com/ansible/ansible-runner/pull/1191/files
-# Interval in seconds between the last message and keep-alive messages that
-# ansible-runner will send
-AWX_RUNNER_KEEPALIVE_SECONDS = 0
-
 # Delete completed work units in receptor
 RECEPTOR_RELEASE_WORK = True
 
@@ -1033,10 +1003,3 @@ AWX_MOUNT_ISOLATED_PATHS_ON_K8S = False
 
 # This is overridden downstream via /etc/tower/conf.d/cluster_host_id.py
 CLUSTER_HOST_ID = socket.gethostname()
-
-UI_NEXT = True
-
-# License compliance for total host count. Possible values:
-# - '': No model - Subscription not counted from Host Metrics
-# - 'unique_managed_hosts': Compliant = automated - deleted hosts (using /api/v2/host_metrics/)
-SUBSCRIPTION_USAGE_MODEL = ''

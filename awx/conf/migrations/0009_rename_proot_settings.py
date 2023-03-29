@@ -10,6 +10,7 @@ def rename_proot_settings(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
+
     dependencies = [('conf', '0008_subscriptions')]
 
     operations = [migrations.RunPython(rename_proot_settings)]

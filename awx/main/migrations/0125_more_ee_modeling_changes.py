@@ -7,6 +7,7 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0124_execution_environments'),
     ]

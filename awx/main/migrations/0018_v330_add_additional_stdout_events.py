@@ -9,6 +9,7 @@ import awx.main.fields
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0017_v330_move_deprecated_stdout'),
     ]

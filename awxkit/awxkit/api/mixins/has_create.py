@@ -201,6 +201,7 @@ except ImportError:
 
 
 class HasCreate(object):
+
     # For reference only.  Use self.ds, or self._dependency_store if mutating.
     dependencies = []
     optional_dependencies = []

@@ -8,6 +8,7 @@ from . import page
 
 
 class User(HasCreate, base.Base):
+
     NATURAL_KEY = ('username',)
 
     def payload(self, **kwargs):
@@ -43,6 +44,7 @@ page.register_page([resources.user, (resources.users, 'post')], User)
 
 
 class Users(page.PageList, User):
+
     pass
 
 
@@ -52,6 +54,7 @@ page.register_page(
 
 
 class Me(Users):
+
     pass
 
 

@@ -32,7 +32,6 @@ const authenticationData = {
   SOCIAL_AUTH_ORGANIZATION_MAP: null,
   SOCIAL_AUTH_TEAM_MAP: null,
   SOCIAL_AUTH_USER_FIELDS: null,
-  SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL: false,
 };
 
 describe('<MiscAuthenticationEdit />', () => {

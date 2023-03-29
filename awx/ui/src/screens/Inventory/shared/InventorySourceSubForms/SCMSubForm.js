@@ -13,7 +13,6 @@ import { required } from 'util/validators';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
 import ProjectLookup from 'components/Lookup/ProjectLookup';
 import Popover from 'components/Popover';
-import FormField from 'components/FormField';
 import {
   OptionsField,
   SourceVarsField,
@@ -37,6 +36,7 @@ const SCMSubForm = ({ autoPopulateProject }) => {
     name: 'source_path',
     validate: required(t`Select a value for this field`),
   });
+
   const { error: sourcePathError, request: fetchSourcePath } = useRequest(
     useCallback(async (projectId) => {
       const { data } = await ProjectsAPI.readInventories(projectId);
@@ -44,6 +44,7 @@ const SCMSubForm = ({ autoPopulateProject }) => {
     }, []),
     []
   );
+
   useEffect(() => {
     if (projectMeta.initialValue) {
       fetchSourcePath(projectMeta.initialValue.id);
@@ -57,7 +58,6 @@ const SCMSubForm = ({ autoPopulateProject }) => {
     (value) => {
       setFieldValue('source_project', value);
       setFieldTouched('source_project', true, false);
-      setFieldValue('scm_branch', '', false);
       if (sourcePathField.value) {
         setFieldValue('source_path', '');
         setFieldTouched('source_path', false);
@@ -68,6 +68,7 @@ const SCMSubForm = ({ autoPopulateProject }) => {
     },
     [fetchSourcePath, setFieldValue, setFieldTouched, sourcePathField.value]
   );
+
   const handleCredentialUpdate = useCallback(
     (value) => {
       setFieldValue('credential', value);
@@ -75,17 +76,9 @@ const SCMSubForm = ({ autoPopulateProject }) => {
     },
     [setFieldValue, setFieldTouched]
   );
+
   return (
     <>
-      {projectField.value?.allow_override && (
-        <FormField
-          id="project-scm-branch"
-          name="scm_branch"
-          type="text"
-          label={t`Source Control Branch/Tag/Commit`}
-          tooltip={helpText.sourceControlBranch}
-        />
-      )}
       <CredentialLookup
         credentialTypeKind="cloud"
         label={t`Credential`}

@@ -14,6 +14,7 @@ logger = logging.getLogger('awx.main.dispatch')
 
 
 class Control(object):
+
     services = ('dispatcher', 'callback_receiver')
     result = None
 

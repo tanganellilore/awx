@@ -21,7 +21,6 @@ on:
 
 jobs:
   stage:
-    if: endsWith(github.repository, '/awx')
     runs-on: ubuntu-latest
     permissions:
       packages: write

@@ -17,6 +17,7 @@ from awx.main.exceptions import PostRunError
 
 
 class RSysLogHandler(logging.handlers.SysLogHandler):
+
     append_nul = False
 
     def _connect_unixsocket(self, address):

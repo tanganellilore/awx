@@ -16,6 +16,7 @@ log = logging.getLogger(__name__)
 
 
 class ExecutionEnvironment(HasCreate, HasCopy, base.Base):
+
     dependencies = [Organization, Credential]
     NATURAL_KEY = ('name',)
 

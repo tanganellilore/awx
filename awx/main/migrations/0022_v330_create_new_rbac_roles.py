@@ -8,6 +8,7 @@ from awx.main.migrations import _migration_utils as migration_utils
 
 
 class Migration(ActivityStreamDisabledMigration):
+
     dependencies = [
         ('main', '0021_v330_declare_new_rbac_roles'),
     ]

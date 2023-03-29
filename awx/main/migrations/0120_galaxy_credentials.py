@@ -13,6 +13,7 @@ logger = logging.getLogger('awx.main.migrations')
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0119_inventory_plugins'),
     ]

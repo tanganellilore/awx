@@ -89,6 +89,7 @@ def objectify_response_json(response):
 
 
 class Page(object):
+
     endpoint = ''
 
     def __init__(self, connection=None, *a, **kw):
@@ -198,6 +199,7 @@ class Page(object):
             raise exception(exc_str, data)
 
         if response.status_code in (http.OK, http.CREATED, http.ACCEPTED):
+
             # Not all JSON responses include a URL.  Grab it from the request
             # object, if needed.
             if 'url' in data:
@@ -335,6 +337,7 @@ def exception_from_status_code(status_code):
 
 
 class PageList(object):
+
     NATURAL_KEY = None
 
     @property

@@ -4,6 +4,7 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0150_rename_inv_sources_inv_updates'),
     ]

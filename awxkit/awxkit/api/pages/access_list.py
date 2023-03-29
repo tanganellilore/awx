@@ -4,6 +4,7 @@ from . import page
 
 
 class AccessList(page.PageList, users.User):
+
     pass
 
 

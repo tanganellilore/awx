@@ -208,7 +208,6 @@ function AWXLogin({ alt, isAuthenticated }) {
         >
           {(formik) => (
             <LoginForm
-              autoComplete="off"
               data-cy="login-form"
               className={authError ? 'pf-m-error' : ''}
               helperText={helperText}

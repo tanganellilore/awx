@@ -22,8 +22,7 @@ import RoutedTabs from 'components/RoutedTabs';
 import RelatedTemplateList from 'components/RelatedTemplateList';
 import SmartInventoryDetail from './SmartInventoryDetail';
 import SmartInventoryEdit from './SmartInventoryEdit';
-import AdvancedInventoryHosts from './AdvancedInventoryHosts';
-import { getInventoryPath } from './shared/utils';
+import SmartInventoryHosts from './SmartInventoryHosts';
 
 function SmartInventory({ setBreadcrumb }) {
   const location = useLocation();
@@ -102,8 +101,8 @@ function SmartInventory({ setBreadcrumb }) {
     );
   }
 
-  if (inventory && inventory?.kind !== 'smart') {
-    return <Redirect to={`${getInventoryPath(inventory)}/details`} />;
+  if (inventory?.kind === '') {
+    return <Redirect to={`/inventories/inventory/${inventory.id}/details`} />;
   }
 
   let showCardHeader = true;
@@ -142,7 +141,7 @@ function SmartInventory({ setBreadcrumb }) {
               />
             </Route>,
             <Route key="hosts" path="/inventories/smart_inventory/:id/hosts">
-              <AdvancedInventoryHosts
+              <SmartInventoryHosts
                 inventory={inventory}
                 setBreadcrumb={setBreadcrumb}
               />

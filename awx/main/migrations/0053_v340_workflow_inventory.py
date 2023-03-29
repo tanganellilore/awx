@@ -9,6 +9,7 @@ import awx.main.fields
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0052_v340_remove_project_scm_delete_on_next_update'),
     ]

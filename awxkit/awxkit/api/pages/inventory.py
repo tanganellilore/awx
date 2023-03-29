@@ -16,6 +16,7 @@ log = logging.getLogger(__name__)
 
 
 class Inventory(HasCopy, HasCreate, HasInstanceGroups, HasVariables, base.Base):
+
     dependencies = [Organization]
     NATURAL_KEY = ('organization', 'name')
 
@@ -125,26 +126,19 @@ class Inventory(HasCopy, HasCreate, HasInstanceGroups, HasVariables, base.Base):
         return inv_updates
 
 
-page.register_page(
-    [
-        resources.inventory,
-        resources.constructed_inventory,
-        (resources.inventories, 'post'),
-        (resources.inventory_copy, 'post'),
-        (resources.constructed_inventories, 'post'),
-    ],
-    Inventory,
-)
+page.register_page([resources.inventory, (resources.inventories, 'post'), (resources.inventory_copy, 'post')], Inventory)
 
 
 class Inventories(page.PageList, Inventory):
+
     pass
 
 
-page.register_page([resources.inventories, resources.related_inventories, resources.constructed_inventories], Inventories)
+page.register_page([resources.inventories, resources.related_inventories], Inventories)
 
 
 class Group(HasCreate, HasVariables, base.Base):
+
     dependencies = [Inventory]
     optional_dependencies = [Credential]
     NATURAL_KEY = ('name', 'inventory')
@@ -219,6 +213,7 @@ page.register_page([resources.group, (resources.groups, 'post')], Group)
 
 
 class Groups(page.PageList, Group):
+
     pass
 
 
@@ -236,6 +231,7 @@ page.register_page(
 
 
 class Host(HasCreate, HasVariables, base.Base):
+
     dependencies = [Inventory]
     NATURAL_KEY = ('name', 'inventory')
 
@@ -277,6 +273,7 @@ page.register_page([resources.host, (resources.hosts, 'post')], Host)
 
 
 class Hosts(page.PageList, Host):
+
     pass
 
 
@@ -284,6 +281,7 @@ page.register_page([resources.hosts, resources.group_related_hosts, resources.in
 
 
 class FactVersion(base.Base):
+
     pass
 
 
@@ -300,6 +298,7 @@ page.register_page(resources.host_related_fact_versions, FactVersions)
 
 
 class FactView(base.Base):
+
     pass
 
 
@@ -307,6 +306,7 @@ page.register_page(resources.fact_view, FactView)
 
 
 class InventorySource(HasCreate, HasNotifications, UnifiedJobTemplate):
+
     optional_schedule_fields = tuple()
     dependencies = [Inventory]
     optional_dependencies = [Credential, Project]
@@ -328,7 +328,6 @@ class InventorySource(HasCreate, HasNotifications, UnifiedJobTemplate):
         optional_fields = (
             'source_path',
             'source_vars',
-            'scm_branch',
             'timeout',
             'overwrite',
             'overwrite_vars',
@@ -404,6 +403,7 @@ page.register_page([resources.inventory_source, (resources.inventory_sources, 'p
 
 
 class InventorySources(page.PageList, InventorySource):
+
     pass
 
 
@@ -411,6 +411,7 @@ page.register_page([resources.inventory_sources, resources.related_inventory_sou
 
 
 class InventorySourceGroups(page.PageList, Group):
+
     pass
 
 
@@ -418,6 +419,7 @@ page.register_page(resources.inventory_sources_related_groups, InventorySourceGr
 
 
 class InventorySourceUpdate(base.Base):
+
     pass
 
 
@@ -425,6 +427,7 @@ page.register_page([resources.inventory_sources_related_update, resources.invent
 
 
 class InventoryUpdate(UnifiedJob):
+
     pass
 
 
@@ -432,6 +435,7 @@ page.register_page(resources.inventory_update, InventoryUpdate)
 
 
 class InventoryUpdates(page.PageList, InventoryUpdate):
+
     pass
 
 
@@ -439,6 +443,7 @@ page.register_page([resources.inventory_updates, resources.inventory_source_upda
 
 
 class InventoryUpdateCancel(base.Base):
+
     pass
 
 
@@ -446,6 +451,7 @@ page.register_page(resources.inventory_update_cancel, InventoryUpdateCancel)
 
 
 class InventoryCopy(base.Base):
+
     pass
 
 

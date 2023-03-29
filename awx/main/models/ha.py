@@ -17,20 +17,15 @@ from django.db.models import Sum
 import redis
 from solo.models import SingletonModel
 
-# AWX
 from awx import __version__ as awx_application_version
 from awx.api.versioning import reverse
-from awx.main.fields import JSONBlob, ImplicitRoleField
+from awx.main.fields import JSONBlob
 from awx.main.managers import InstanceManager, UUID_DEFAULT
 from awx.main.constants import JOB_FOLDER_PREFIX
 from awx.main.models.base import BaseModel, HasEditsMixin, prevent_search
-from awx.main.models.rbac import (
-    ROLE_SINGLETON_SYSTEM_ADMINISTRATOR,
-    ROLE_SINGLETON_SYSTEM_AUDITOR,
-)
 from awx.main.models.unified_jobs import UnifiedJob
 from awx.main.utils.common import get_corrected_cpu, get_cpu_effective_capacity, get_corrected_memory, get_mem_effective_capacity
-from awx.main.models.mixins import RelatedJobsMixin, ResourceMixin
+from awx.main.models.mixins import RelatedJobsMixin
 
 # ansible-runner
 from ansible_runner.utils.capacity import get_cpu_count, get_mem_in_bytes
@@ -357,7 +352,7 @@ class Instance(HasPolicyEditsMixin, BaseModel):
         self.save_health_data(awx_application_version, get_cpu_count(), get_mem_in_bytes(), update_last_seen=True, errors=errors)
 
 
-class InstanceGroup(HasPolicyEditsMixin, BaseModel, RelatedJobsMixin, ResourceMixin):
+class InstanceGroup(HasPolicyEditsMixin, BaseModel, RelatedJobsMixin):
     """A model representing a Queue/Group of AWX Instances."""
 
     name = models.CharField(max_length=250, unique=True)
@@ -384,24 +379,6 @@ class InstanceGroup(HasPolicyEditsMixin, BaseModel, RelatedJobsMixin, ResourceMi
             default='',
         )
     )
-    admin_role = ImplicitRoleField(
-        parent_role=[
-            'singleton:' + ROLE_SINGLETON_SYSTEM_ADMINISTRATOR,
-        ]
-    )
-    use_role = ImplicitRoleField(
-        parent_role=[
-            'admin_role',
-        ]
-    )
-    read_role = ImplicitRoleField(
-        parent_role=[
-            'singleton:' + ROLE_SINGLETON_SYSTEM_AUDITOR,
-            'use_role',
-            'admin_role',
-        ]
-    )
-
     max_concurrent_jobs = models.IntegerField(default=0, help_text=_("Maximum number of concurrent jobs to run on this group. Zero means no limit."))
     max_forks = models.IntegerField(default=0, help_text=_("Max forks to execute on this group. Zero means no limit."))
     policy_instance_percentage = models.IntegerField(default=0, help_text=_("Percentage of Instances to automatically assign to this group"))
@@ -496,6 +473,7 @@ def on_instance_deleted(sender, instance, using, **kwargs):
 
 
 class UnifiedJobTemplateInstanceGroupMembership(models.Model):
+
     unifiedjobtemplate = models.ForeignKey('UnifiedJobTemplate', on_delete=models.CASCADE)
     instancegroup = models.ForeignKey('InstanceGroup', on_delete=models.CASCADE)
     position = models.PositiveIntegerField(
@@ -506,6 +484,7 @@ class UnifiedJobTemplateInstanceGroupMembership(models.Model):
 
 
 class OrganizationInstanceGroupMembership(models.Model):
+
     organization = models.ForeignKey('Organization', on_delete=models.CASCADE)
     instancegroup = models.ForeignKey('InstanceGroup', on_delete=models.CASCADE)
     position = models.PositiveIntegerField(
@@ -516,6 +495,7 @@ class OrganizationInstanceGroupMembership(models.Model):
 
 
 class InventoryInstanceGroupMembership(models.Model):
+
     inventory = models.ForeignKey('Inventory', on_delete=models.CASCADE)
     instancegroup = models.ForeignKey('InstanceGroup', on_delete=models.CASCADE)
     position = models.PositiveIntegerField(
@@ -526,6 +506,7 @@ class InventoryInstanceGroupMembership(models.Model):
 
 
 class JobLaunchConfigInstanceGroupMembership(models.Model):
+
     joblaunchconfig = models.ForeignKey('JobLaunchConfig', on_delete=models.CASCADE)
     instancegroup = models.ForeignKey('InstanceGroup', on_delete=models.CASCADE)
     position = models.PositiveIntegerField(
@@ -536,6 +517,7 @@ class JobLaunchConfigInstanceGroupMembership(models.Model):
 
 
 class ScheduleInstanceGroupMembership(models.Model):
+
     schedule = models.ForeignKey('Schedule', on_delete=models.CASCADE)
     instancegroup = models.ForeignKey('InstanceGroup', on_delete=models.CASCADE)
     position = models.PositiveIntegerField(
@@ -546,6 +528,7 @@ class ScheduleInstanceGroupMembership(models.Model):
 
 
 class WorkflowJobTemplateNodeBaseInstanceGroupMembership(models.Model):
+
     workflowjobtemplatenode = models.ForeignKey('WorkflowJobTemplateNode', on_delete=models.CASCADE)
     instancegroup = models.ForeignKey('InstanceGroup', on_delete=models.CASCADE)
     position = models.PositiveIntegerField(
@@ -556,6 +539,7 @@ class WorkflowJobTemplateNodeBaseInstanceGroupMembership(models.Model):
 
 
 class WorkflowJobNodeBaseInstanceGroupMembership(models.Model):
+
     workflowjobnode = models.ForeignKey('WorkflowJobNode', on_delete=models.CASCADE)
     instancegroup = models.ForeignKey('InstanceGroup', on_delete=models.CASCADE)
     position = models.PositiveIntegerField(
@@ -566,6 +550,7 @@ class WorkflowJobNodeBaseInstanceGroupMembership(models.Model):
 
 
 class WorkflowJobInstanceGroupMembership(models.Model):
+
     workflowjobnode = models.ForeignKey('WorkflowJob', on_delete=models.CASCADE)
     instancegroup = models.ForeignKey('InstanceGroup', on_delete=models.CASCADE)
     position = models.PositiveIntegerField(

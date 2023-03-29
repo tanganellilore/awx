@@ -12,6 +12,7 @@ def migrate_existing_container_groups(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0131_undo_org_polymorphic_ee'),
     ]

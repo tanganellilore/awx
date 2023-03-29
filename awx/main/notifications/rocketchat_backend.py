@@ -16,6 +16,7 @@ logger = logging.getLogger('awx.main.notifications.rocketchat_backend')
 
 
 class RocketChatBackend(AWXBaseEmailBackend, CustomNotificationBase):
+
     init_parameters = {"rocketchat_url": {"label": "Target URL", "type": "string"}, "rocketchat_no_verify_ssl": {"label": "Verify SSL", "type": "bool"}}
     recipient_parameter = "rocketchat_url"
     sender_parameter = None

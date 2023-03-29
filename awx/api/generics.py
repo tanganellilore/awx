@@ -28,7 +28,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import views
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.renderers import StaticHTMLRenderer
 from rest_framework.negotiation import DefaultContentNegotiation
 
@@ -135,6 +135,7 @@ def get_default_schema():
 
 
 class APIView(views.APIView):
+
     schema = get_default_schema()
     versioning_class = URLPathVersioning
 
@@ -674,7 +675,7 @@ class SubListCreateAttachDetachAPIView(SubListCreateAPIView):
                 location = None
             created = True
 
-        # Retrieve the sub object (whether created or by ID).
+        # Retrive the sub object (whether created or by ID).
         sub = get_object_or_400(self.model, pk=sub_id)
 
         # Verify we have permission to attach.
@@ -799,6 +800,7 @@ class RetrieveUpdateDestroyAPIView(RetrieveUpdateAPIView, DestroyAPIView):
 
 
 class ResourceAccessList(ParentMixin, ListAPIView):
+
     serializer_class = ResourceAccessListElementSerializer
     ordering = ('username',)
 
@@ -821,8 +823,9 @@ def trigger_delayed_deep_copy(*args, **kwargs):
 
 
 class CopyAPIView(GenericAPIView):
+
     serializer_class = CopySerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
     copy_return_serializer_class = None
     new_in_330 = True
     new_in_api_v2 = True

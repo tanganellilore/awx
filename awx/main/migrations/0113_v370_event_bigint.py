@@ -37,6 +37,7 @@ class FakeAlterField(migrations.AlterField):
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0112_v370_workflow_node_identifier'),
     ]

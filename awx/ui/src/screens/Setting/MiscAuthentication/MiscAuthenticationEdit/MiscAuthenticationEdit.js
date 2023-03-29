@@ -53,8 +53,7 @@ function MiscAuthenticationEdit() {
         'SESSION_COOKIE_AGE',
         'SOCIAL_AUTH_ORGANIZATION_MAP',
         'SOCIAL_AUTH_TEAM_MAP',
-        'SOCIAL_AUTH_USER_FIELDS',
-        'SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL'
+        'SOCIAL_AUTH_USER_FIELDS'
       );
 
       const authenticationData = {
@@ -242,10 +241,6 @@ function MiscAuthenticationEdit() {
                 <ObjectField
                   name="SOCIAL_AUTH_USER_FIELDS"
                   config={authentication.SOCIAL_AUTH_USER_FIELDS}
-                />
-                <BooleanField
-                  name="SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL"
-                  config={authentication.SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL}
                 />
                 {submitError && <FormSubmitError error={submitError} />}
                 {revertError && <FormSubmitError error={revertError} />}

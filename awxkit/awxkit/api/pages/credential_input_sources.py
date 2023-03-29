@@ -4,6 +4,7 @@ from . import page
 
 
 class CredentialInputSource(base.Base):
+
     pass
 
 
@@ -11,6 +12,7 @@ page.register_page(resources.credential_input_source, CredentialInputSource)
 
 
 class CredentialInputSources(page.PageList, CredentialInputSource):
+
     pass
 
 

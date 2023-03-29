@@ -21,6 +21,7 @@ def _force_raising_exception(view_obj, request, format=None):
 
 
 class ApiErrorView(views.APIView):
+
     authentication_classes = []
     permission_classes = (permissions.AllowAny,)
     metadata_class = None

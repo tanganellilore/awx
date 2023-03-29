@@ -29,6 +29,7 @@ logger = logging.getLogger('awx.main.notifications.pagerduty_backend')
 
 
 class PagerDutyBackend(AWXBaseEmailBackend, CustomNotificationBase):
+
     init_parameters = {
         "subdomain": {"label": "Pagerduty subdomain", "type": "string"},
         "token": {"label": "API Token", "type": "password"},

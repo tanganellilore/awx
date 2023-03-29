@@ -59,11 +59,13 @@ class LabelSubListCreateAttachDetachView(SubListCreateAttachDetachAPIView):
 
 
 class LabelDetail(RetrieveUpdateAPIView):
+
     model = Label
     serializer_class = LabelSerializer
 
 
 class LabelList(ListCreateAPIView):
+
     name = _("Labels")
     model = Label
     serializer_class = LabelSerializer

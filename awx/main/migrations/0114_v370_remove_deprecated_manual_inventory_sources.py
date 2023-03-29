@@ -15,6 +15,7 @@ def remove_manual_inventory_sources(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0113_v370_event_bigint'),
     ]

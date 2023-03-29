@@ -12,6 +12,7 @@ from ._squashed_30 import SQUASHED_30
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0003_squashed_v300_v303_updates'),
     ]

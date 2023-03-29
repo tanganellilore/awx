@@ -51,6 +51,7 @@ page.register_page(resources.workflow_job, WorkflowJob)
 
 
 class WorkflowJobs(page.PageList, WorkflowJob):
+
     pass
 
 

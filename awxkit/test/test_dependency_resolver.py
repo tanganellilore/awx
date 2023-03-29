@@ -6,6 +6,7 @@ from awxkit.api.mixins import has_create
 
 
 class MockHasCreate(has_create.HasCreate):
+
     connection = None
 
     def __str__(self):
@@ -25,6 +26,7 @@ class A(MockHasCreate):
 
 
 class B(MockHasCreate):
+
     optional_dependencies = [A]
 
     def create(self, a=None, **kw):
@@ -33,6 +35,7 @@ class B(MockHasCreate):
 
 
 class C(MockHasCreate):
+
     dependencies = [A, B]
 
     def create(self, a=A, b=B, **kw):
@@ -41,6 +44,7 @@ class C(MockHasCreate):
 
 
 class D(MockHasCreate):
+
     dependencies = [A]
     optional_dependencies = [B]
 
@@ -50,6 +54,7 @@ class D(MockHasCreate):
 
 
 class E(MockHasCreate):
+
     dependencies = [D, C]
 
     def create(self, c=C, d=D, **kw):
@@ -58,6 +63,7 @@ class E(MockHasCreate):
 
 
 class F(MockHasCreate):
+
     dependencies = [B]
     optional_dependencies = [E]
 
@@ -67,6 +73,7 @@ class F(MockHasCreate):
 
 
 class G(MockHasCreate):
+
     dependencies = [D]
     optional_dependencies = [F, E]
 
@@ -76,6 +83,7 @@ class G(MockHasCreate):
 
 
 class H(MockHasCreate):
+
     optional_dependencies = [E, A]
 
     def create(self, a=None, e=None, **kw):
@@ -89,6 +97,7 @@ class MultipleWordClassName(MockHasCreate):
 
 
 class AnotherMultipleWordClassName(MockHasCreate):
+
     optional_dependencies = [MultipleWordClassName]
 
     def create(self, multiple_word_class_name=None, **kw):
@@ -457,6 +466,7 @@ class OneWithArgs(MockHasCreate):
 
 
 class TwoWithArgs(MockHasCreate):
+
     dependencies = [OneWithArgs]
 
     def create(self, one_with_args=OneWithArgs, **kw):
@@ -468,6 +478,7 @@ class TwoWithArgs(MockHasCreate):
 
 
 class ThreeWithArgs(MockHasCreate):
+
     dependencies = [OneWithArgs]
     optional_dependencies = [TwoWithArgs]
 
@@ -478,6 +489,7 @@ class ThreeWithArgs(MockHasCreate):
 
 
 class FourWithArgs(MockHasCreate):
+
     dependencies = [TwoWithArgs, ThreeWithArgs]
 
     def create(self, two_with_args=TwoWithArgs, three_with_args=ThreeWithArgs, **kw):
@@ -546,6 +558,7 @@ def test_tuples_for_class_arg_cause_unshared_dependencies_when_downstream():
 
 
 class NotHasCreate(object):
+
     pass
 
 
@@ -570,6 +583,7 @@ class MixinUserD(MixinUserC):
 
 
 class NotHasCreateDependencyHolder(MockHasCreate):
+
     dependencies = [NotHasCreate]
 
     def create(self, not_has_create=MixinUserA):
@@ -594,6 +608,7 @@ def test_not_has_create_passed_dependency():
 
 
 class HasCreateParentDependencyHolder(MockHasCreate):
+
     dependencies = [MixinUserB]
 
     def create(self, mixin_user_b=MixinUserC):
@@ -611,6 +626,7 @@ def test_has_create_stored_as_parent_dependency():
 
 
 class DynamicallyDeclaresNotHasCreateDependency(MockHasCreate):
+
     dependencies = [NotHasCreate]
 
     def create(self, not_has_create=MixinUserA):
@@ -629,6 +645,7 @@ def test_subclass_or_parent_dynamic_not_has_create_dependency_declaration(depend
 
 
 class DynamicallyDeclaresHasCreateDependency(MockHasCreate):
+
     dependencies = [MixinUserB]
 
     def create(self, mixin_user_b=MixinUserB):

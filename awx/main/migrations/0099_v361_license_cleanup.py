@@ -13,6 +13,7 @@ def _cleanup_license_setting(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0098_v360_rename_cyberark_aim_credential_type'),
     ]

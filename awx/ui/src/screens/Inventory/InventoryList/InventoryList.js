@@ -135,7 +135,6 @@ function InventoryList() {
 
   const addInventory = t`Add inventory`;
   const addSmartInventory = t`Add smart inventory`;
-  const addConstructedInventory = t`Add constructed inventory`;
   const addButton = (
     <AddDropDownButton
       ouiaId="add-inventory-button"
@@ -158,15 +157,6 @@ function InventoryList() {
           aria-label={addSmartInventory}
         >
           {addSmartInventory}
-        </DropdownItem>,
-        <DropdownItem
-          ouiaId="add-constructed-inventory-item"
-          to={`${match.url}/constructed_inventory/add/`}
-          component={Link}
-          key={addConstructedInventory}
-          aria-label={addConstructedInventory}
-        >
-          {addConstructedInventory}
         </DropdownItem>,
       ]}
     />
@@ -195,7 +185,6 @@ function InventoryList() {
                 options: [
                   ['', t`Inventory`],
                   ['smart', t`Smart Inventory`],
-                  ['constructed', t`Constructed Inventory`],
                 ],
               },
               {
@@ -272,6 +261,11 @@ function InventoryList() {
                 inventory={inventory}
                 rowIndex={index}
                 fetchInventories={fetchInventories}
+                detailUrl={
+                  inventory.kind === 'smart'
+                    ? `${match.url}/smart_inventory/${inventory.id}/details`
+                    : `${match.url}/inventory/${inventory.id}/details`
+                }
                 onSelect={() => {
                   if (!inventory.pending_deletion) {
                     handleSelect(inventory);

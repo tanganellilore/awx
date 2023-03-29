@@ -25,6 +25,7 @@ def gce_id_backward(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0069_v350_generate_unique_install_uuid'),
     ]

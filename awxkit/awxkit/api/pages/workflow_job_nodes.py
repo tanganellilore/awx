@@ -25,6 +25,7 @@ page.register_page(resources.workflow_job_node, WorkflowJobNode)
 
 
 class WorkflowJobNodes(page.PageList, WorkflowJobNode):
+
     pass
 
 

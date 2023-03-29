@@ -40,6 +40,7 @@ class WorkerSignalHandler:
 
 
 class AWXConsumerBase(object):
+
     last_stats = time.time()
 
     def __init__(self, name, worker, queues=[], pool=None):

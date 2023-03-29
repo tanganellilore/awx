@@ -22,6 +22,7 @@ def forwards_split_organization_any(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0080_v360_replace_job_origin'),
     ]

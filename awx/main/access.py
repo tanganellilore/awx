@@ -561,6 +561,7 @@ class NotificationAttachMixin(BaseAccess):
 
 
 class InstanceAccess(BaseAccess):
+
     model = Instance
     prefetch_related = ('rampart_groups',)
 
@@ -578,6 +579,7 @@ class InstanceAccess(BaseAccess):
         return super(InstanceAccess, self).can_unattach(obj, sub_obj, relationship, relationship, data=data)
 
     def can_add(self, data):
+
         return self.user.is_superuser
 
     def can_change(self, obj, data):
@@ -588,39 +590,18 @@ class InstanceAccess(BaseAccess):
 
 
 class InstanceGroupAccess(BaseAccess):
-    """
-    I can see Instance Groups when I am:
-       - a superuser(system administrator)
-       - at least read_role on the instance group
-    I can edit Instance Groups when I am:
-       - a superuser
-       - admin role on the Instance group
-    I can add/delete Instance Groups:
-       - a superuser(system administrator)
-    I can use Instance Groups when I have:
-       - use_role on the instance group
-    """
 
     model = InstanceGroup
     prefetch_related = ('instances',)
 
     def filtered_queryset(self):
-        return self.model.accessible_objects(self.user, 'read_role')
-
-    @check_superuser
-    def can_use(self, obj):
-        return self.user in obj.use_role
+        return InstanceGroup.objects.filter(organization__in=Organization.accessible_pk_qs(self.user, 'admin_role')).distinct()
 
     def can_add(self, data):
         return self.user.is_superuser
 
-    @check_superuser
     def can_change(self, obj, data):
-        return self.can_admin(obj)
-
-    @check_superuser
-    def can_admin(self, obj):
-        return self.user in obj.admin_role
+        return self.user.is_superuser
 
     def can_delete(self, obj):
         if obj.name in [settings.DEFAULT_EXECUTION_QUEUE_NAME, settings.DEFAULT_CONTROL_PLANE_QUEUE_NAME]:
@@ -867,7 +848,7 @@ class OrganizationAccess(NotificationAttachMixin, BaseAccess):
             return RoleAccess(self.user).can_attach(rel_role, sub_obj, 'members', *args, **kwargs)
 
         if relationship == "instance_groups":
-            if self.user in obj.admin_role and self.user in sub_obj.use_role:
+            if self.user.is_superuser:
                 return True
             return False
         return super(OrganizationAccess, self).can_attach(obj, sub_obj, relationship, *args, **kwargs)
@@ -956,7 +937,7 @@ class InventoryAccess(BaseAccess):
 
     def can_attach(self, obj, sub_obj, relationship, *args, **kwargs):
         if relationship == "instance_groups":
-            if self.user in sub_obj.use_role and self.user in obj.admin_role:
+            if self.user.can_access(type(sub_obj), "read", sub_obj) and self.user in obj.organization.admin_role:
                 return True
             return False
         return super(InventoryAccess, self).can_attach(obj, sub_obj, relationship, *args, **kwargs)
@@ -1049,9 +1030,7 @@ class GroupAccess(BaseAccess):
         return Group.objects.filter(inventory__in=Inventory.accessible_pk_qs(self.user, 'read_role'))
 
     def can_add(self, data):
-        if not data:  # So the browseable API will work
-            return Inventory.accessible_objects(self.user, 'admin_role').exists()
-        if 'inventory' not in data:
+        if not data or 'inventory' not in data:
             return False
         # Checks for admin or change permission on inventory.
         return self.check_related('inventory', Inventory, data)
@@ -1693,12 +1672,11 @@ class JobTemplateAccess(NotificationAttachMixin, UnifiedCredentialsMixin, BaseAc
         return self.user.is_superuser or self.user in obj.admin_role
 
     @check_superuser
-    # object here is the job template. sub_object here is what is being attached
     def can_attach(self, obj, sub_obj, relationship, data, skip_sub_obj_read_check=False):
         if relationship == "instance_groups":
             if not obj.organization:
                 return False
-            return self.user in sub_obj.use_role and self.user in obj.admin_role
+            return self.user.can_access(type(sub_obj), "read", sub_obj) and self.user in obj.organization.admin_role
         return super(JobTemplateAccess, self).can_attach(obj, sub_obj, relationship, data, skip_sub_obj_read_check=skip_sub_obj_read_check)
 
     @check_superuser
@@ -1875,6 +1853,8 @@ class JobLaunchConfigAccess(UnifiedCredentialsMixin, BaseAccess):
     def _related_filtered_queryset(self, cls):
         if cls is Label:
             return LabelAccess(self.user).filtered_queryset()
+        elif cls is InstanceGroup:
+            return InstanceGroupAccess(self.user).filtered_queryset()
         else:
             return cls._accessible_pk_qs(cls, self.user, 'use_role')
 
@@ -1886,7 +1866,6 @@ class JobLaunchConfigAccess(UnifiedCredentialsMixin, BaseAccess):
 
     @check_superuser
     def can_add(self, data, template=None):
-        # WARNING: duplicated with BulkJobLaunchSerializer, check when changing permission levels
         # This is a special case, we don't check related many-to-many elsewhere
         # launch RBAC checks use this
         if 'reference_obj' in data:
@@ -2019,16 +1998,7 @@ class WorkflowJobNodeAccess(BaseAccess):
     )
 
     def filtered_queryset(self):
-        return self.model.objects.filter(
-            Q(workflow_job__unified_job_template__in=UnifiedJobTemplate.accessible_pk_qs(self.user, 'read_role'))
-            | Q(workflow_job__organization__in=Organization.objects.filter(Q(admin_role__members=self.user)))
-        )
-
-    def can_read(self, obj):
-        """Overriding this opens up detail view access for bulk jobs, where the workflow job has no associated workflow job template."""
-        if obj.workflow_job.is_bulk_job and obj.workflow_job.created_by_id == self.user.id:
-            return True
-        return super().can_read(obj)
+        return self.model.objects.filter(workflow_job__unified_job_template__in=UnifiedJobTemplate.accessible_pk_qs(self.user, 'read_role'))
 
     @check_superuser
     def can_add(self, data):
@@ -2154,16 +2124,7 @@ class WorkflowJobAccess(BaseAccess):
     )
 
     def filtered_queryset(self):
-        return WorkflowJob.objects.filter(
-            Q(unified_job_template__in=UnifiedJobTemplate.accessible_pk_qs(self.user, 'read_role'))
-            | Q(organization__in=Organization.objects.filter(Q(admin_role__members=self.user)), is_bulk_job=True)
-        )
-
-    def can_read(self, obj):
-        """Overriding this opens up detail view access for bulk jobs, where the workflow job has no associated workflow job template."""
-        if obj.is_bulk_job and obj.created_by_id == self.user.id:
-            return True
-        return super().can_read(obj)
+        return WorkflowJob.objects.filter(unified_job_template__in=UnifiedJobTemplate.accessible_pk_qs(self.user, 'read_role'))
 
     def can_add(self, data):
         # Old add-start system for launching jobs is being depreciated, and
@@ -2391,6 +2352,7 @@ class JobEventAccess(BaseAccess):
 
 
 class UnpartitionedJobEventAccess(JobEventAccess):
+
     model = UnpartitionedJobEvent
 
 

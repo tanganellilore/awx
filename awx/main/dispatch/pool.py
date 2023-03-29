@@ -192,6 +192,7 @@ class PoolWorker(object):
 
 
 class StatefulPoolWorker(PoolWorker):
+
     track_managed_tasks = True
 
 

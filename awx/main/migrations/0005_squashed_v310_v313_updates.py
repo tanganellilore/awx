@@ -7,6 +7,7 @@ from ._squashed_31 import SQUASHED_31
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0004_squashed_v310_release'),
     ]

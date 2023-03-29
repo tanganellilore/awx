@@ -3,6 +3,7 @@ from awx.main.migrations._hg_removal import delete_hg_scm
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0122_really_remove_cloudforms_inventory'),
     ]

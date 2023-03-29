@@ -31,7 +31,7 @@ import { formatDateString } from 'util/dates';
 import Popover from 'components/Popover';
 import { VERBOSITY } from 'components/VerbositySelectField';
 import InventorySourceSyncButton from '../shared/InventorySourceSyncButton';
-import useWsInventorySourcesDetails from '../shared/useWsInventorySourcesDetails';
+import useWsInventorySourcesDetails from '../InventorySources/useWsInventorySourcesDetails';
 import getHelpText from '../shared/Inventory.helptext';
 
 function InventorySourceDetail({ inventorySource }) {
@@ -48,7 +48,6 @@ function InventorySourceDetail({ inventorySource }) {
     source,
     source_path,
     source_vars,
-    scm_branch,
     update_cache_timeout,
     update_on_launch,
     verbosity,
@@ -233,11 +232,6 @@ function InventorySourceDetail({ inventorySource }) {
           label={t`Verbosity`}
           helpText={helpText.subFormVerbosityFields}
           value={VERBOSITY()[verbosity]}
-        />
-        <Detail
-          label={t`Source Control Branch`}
-          helpText={helpText.sourceControlBranch}
-          value={scm_branch}
         />
         <Detail
           label={t`Cache timeout`}

@@ -9,6 +9,7 @@ from awx.main.migrations._multi_cred import migrate_inventory_source_cred, migra
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         ('main', '0022_v330_create_new_rbac_roles'),
     ]

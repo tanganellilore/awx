@@ -12,6 +12,7 @@ from . import page
 
 
 class WorkflowJobTemplate(HasCopy, HasCreate, HasNotifications, HasSurvey, UnifiedJobTemplate):
+
     optional_dependencies = [Organization]
     NATURAL_KEY = ('organization', 'name')
 
@@ -99,6 +100,7 @@ page.register_page(
 
 
 class WorkflowJobTemplates(page.PageList, WorkflowJobTemplate):
+
     pass
 
 
@@ -106,6 +108,7 @@ page.register_page([resources.workflow_job_templates, resources.related_workflow
 
 
 class WorkflowJobTemplateLaunch(base.Base):
+
     pass
 
 
@@ -113,6 +116,7 @@ page.register_page(resources.workflow_job_template_launch, WorkflowJobTemplateLa
 
 
 class WorkflowJobTemplateCopy(base.Base):
+
     pass
 
 

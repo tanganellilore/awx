@@ -23,7 +23,6 @@ import InventoryEdit from './InventoryEdit';
 import InventoryGroups from './InventoryGroups';
 import InventoryHosts from './InventoryHosts/InventoryHosts';
 import InventorySources from './InventorySources';
-import { getInventoryPath } from './shared/utils';
 
 function Inventory({ setBreadcrumb }) {
   const [contentError, setContentError] = useState(null);
@@ -112,8 +111,10 @@ function Inventory({ setBreadcrumb }) {
     showCardHeader = false;
   }
 
-  if (inventory && inventory?.kind !== '') {
-    return <Redirect to={`${getInventoryPath(inventory)}/details`} />;
+  if (inventory?.kind === 'smart') {
+    return (
+      <Redirect to={`/inventories/smart_inventory/${inventory.id}/details`} />
+    );
   }
 
   return (

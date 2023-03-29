@@ -27,6 +27,7 @@ logger = logging.getLogger('awx.analytics')
 
 
 class MetricsView(APIView):
+
     name = _('Metrics')
     swagger_topic = 'Metrics'
 

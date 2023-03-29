@@ -44,10 +44,6 @@ class CustomAction(metaclass=CustomActionRegistryMeta):
 
 
 class Launchable(object):
-    @property
-    def options_endpoint(self):
-        return self.page.endpoint + '1/{}/'.format(self.action)
-
     def add_arguments(self, parser, resource_options_parser, with_pk=True):
         from .options import pk_or_name
 
@@ -57,7 +53,7 @@ class Launchable(object):
         parser.choices[self.action].add_argument('--action-timeout', type=int, help='If set with --monitor or --wait, time out waiting on job completion.')
         parser.choices[self.action].add_argument('--wait', action='store_true', help='If set, waits until the launched job finishes.')
 
-        launch_time_options = self.page.connection.options(self.options_endpoint)
+        launch_time_options = self.page.connection.options(self.page.endpoint + '1/{}/'.format(self.action))
         if launch_time_options.ok:
             launch_time_options = launch_time_options.json()['actions']['POST']
             resource_options_parser.options['LAUNCH'] = launch_time_options
@@ -92,48 +88,6 @@ class Launchable(object):
 class JobTemplateLaunch(Launchable, CustomAction):
     action = 'launch'
     resource = 'job_templates'
-
-
-class BulkJobLaunch(Launchable, CustomAction):
-    action = 'job_launch'
-    resource = 'bulk'
-
-    @property
-    def options_endpoint(self):
-        return self.page.endpoint + '{}/'.format(self.action)
-
-    def add_arguments(self, parser, resource_options_parser):
-        Launchable.add_arguments(self, parser, resource_options_parser, with_pk=False)
-
-    def perform(self, **kwargs):
-        monitor_kwargs = {
-            'monitor': kwargs.pop('monitor', False),
-            'wait': kwargs.pop('wait', False),
-            'action_timeout': kwargs.pop('action_timeout', False),
-        }
-        response = self.page.get().job_launch.post(kwargs)
-        self.monitor(response, **monitor_kwargs)
-        return response
-
-
-class BulkHostCreate(CustomAction):
-    action = 'host_create'
-    resource = 'bulk'
-
-    @property
-    def options_endpoint(self):
-        return self.page.endpoint + '{}/'.format(self.action)
-
-    def add_arguments(self, parser, resource_options_parser):
-        options = self.page.connection.options(self.options_endpoint)
-        if options.ok:
-            options = options.json()['actions']['POST']
-            resource_options_parser.options['HOSTCREATEPOST'] = options
-            resource_options_parser.build_query_arguments(self.action, 'HOSTCREATEPOST')
-
-    def perform(self, **kwargs):
-        response = self.page.get().host_create.post(kwargs)
-        return response
 
 
 class ProjectUpdate(Launchable, CustomAction):
@@ -194,6 +148,7 @@ class WorkflowLaunch(Launchable, CustomAction):
 
 
 class HasStdout(object):
+
     action = 'stdout'
 
     def add_arguments(self, parser, resource_options_parser):
@@ -225,6 +180,7 @@ class AdhocCommandStdout(HasStdout, CustomAction):
 
 
 class AssociationMixin(object):
+
     action = 'associate'
 
     def add_arguments(self, parser, resource_options_parser):
@@ -388,6 +344,7 @@ class SettingsList(CustomAction):
 
 
 class RoleMixin(object):
+
     has_roles = [
         ['organizations', 'organization'],
         ['projects', 'project'],
@@ -470,21 +427,25 @@ class RoleMixin(object):
 
 
 class UserGrant(RoleMixin, CustomAction):
+
     resource = 'users'
     action = 'grant'
 
 
 class UserRevoke(RoleMixin, CustomAction):
+
     resource = 'users'
     action = 'revoke'
 
 
 class TeamGrant(RoleMixin, CustomAction):
+
     resource = 'teams'
     action = 'grant'
 
 
 class TeamRevoke(RoleMixin, CustomAction):
+
     resource = 'teams'
     action = 'revoke'
 
@@ -515,6 +476,7 @@ class SettingsModify(CustomAction):
 
 
 class HasMonitor(object):
+
     action = 'monitor'
 
     def add_arguments(self, parser, resource_options_parser):

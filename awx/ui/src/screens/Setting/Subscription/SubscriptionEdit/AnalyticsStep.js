@@ -41,7 +41,7 @@ function AnalyticsStep() {
             component="a"
             href={`${getDocsBaseUrl(
               config
-            )}/html/administration/usability_data_collection.html#automation-analytics`}
+            )}/html/installandreference/user-data.html#index-0`}
             variant="link"
             isInline
             ouiaId="tower-documentation-link"

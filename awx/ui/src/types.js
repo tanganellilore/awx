@@ -439,12 +439,3 @@ export const Toast = shape({
   hasTimeout: bool,
   message: string,
 });
-
-export const HostMetrics = shape({
-  hostname: string.isRequired,
-  first_automation: string.isRequired,
-  last_automation: string.isRequired,
-  automated_counter: number.isRequired,
-  used_in_inventories: number,
-  deleted_counter: number,
-});

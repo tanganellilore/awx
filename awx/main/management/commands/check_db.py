@@ -9,6 +9,7 @@ class Command(BaseCommand):
     """Checks connection to the database, and prints out connection info if not connected"""
 
     def handle(self, *args, **options):
+
         with connection.cursor() as cursor:
             cursor.execute("SELECT version()")
             version = str(cursor.fetchone()[0])

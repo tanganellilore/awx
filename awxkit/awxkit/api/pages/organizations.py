@@ -9,6 +9,7 @@ from . import page
 
 
 class Organization(HasCreate, HasInstanceGroups, HasNotifications, base.Base):
+
     NATURAL_KEY = ('name',)
 
     def add_admin(self, user):
@@ -67,6 +68,7 @@ page.register_page([resources.organization, (resources.organizations, 'post')], 
 
 
 class Organizations(page.PageList, Organization):
+
     pass
 
 

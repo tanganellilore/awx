@@ -2,7 +2,7 @@
 
 Make a GET request to this resource to retrieve aggregate statistics about job runs suitable for graphing.
 
-## Parameters and Filtering
+## Parmeters and Filtering
 
 The `period` of the data can be adjusted with:
 
