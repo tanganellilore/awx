@@ -165,9 +165,9 @@ class AWXConsumerPG(AWXConsumerBase):
             self.pool.cleanup()
             self.last_cleanup = time.time()
     
-    def check_db_connection(self, current_check=0, max_check=12):
+    def check_db_connection(conn, current_check=0, max_check=12):
         if current_check >= max_check:
-            self.conn.check_conn()
+            conn.check_conn()
             return 0
         return current_check + 1
 
@@ -190,7 +190,7 @@ class AWXConsumerPG(AWXConsumerBase):
                             self.process_task(json.loads(e.payload))
                             current_db_check = 0
                         else:
-                            current_db_check = self.check_db_connection(current_db_check)
+                            current_db_check = self.check_db_connection(conn, current_db_check)
                         self.run_periodic_tasks()
                         self.pg_is_down = False
                     if self.should_stop:
