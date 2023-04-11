@@ -164,13 +164,19 @@ class AWXConsumerPG(AWXConsumerBase):
             # so that we scale down workers and free up connections
             self.pool.cleanup()
             self.last_cleanup = time.time()
+    
+    def check_db_connection(self, current_check=0, max_check=12):
+        if current_check >= max_check:
+            self.conn.check_conn()
+            return 0
+        return current_check + 1
 
     def run(self, *args, **kwargs):
         super(AWXConsumerPG, self).run(*args, **kwargs)
 
         logger.info(f"Running worker {self.name} listening to queues {self.queues}")
         init = False
-
+        current_db_check = 0
         while True:
             try:
                 with pg_bus_conn(new_connection=True) as conn:
@@ -182,6 +188,9 @@ class AWXConsumerPG(AWXConsumerBase):
                     for e in conn.events(yield_timeouts=True):
                         if e is not None:
                             self.process_task(json.loads(e.payload))
+                            current_db_check = 0
+                        else:
+                            current_db_check = self.check_db_connection(current_db_check)
                         self.run_periodic_tasks()
                         self.pg_is_down = False
                     if self.should_stop:

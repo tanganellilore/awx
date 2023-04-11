@@ -66,6 +66,9 @@ class PubSub(object):
                 while self.conn.notifies:
                     yield self.conn.notifies.pop(0)
 
+    def check_conn(self):
+        self.conn.cursor().execute('SELECT 1')
+
     def close(self):
         self.conn.close()
 
