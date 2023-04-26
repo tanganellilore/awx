@@ -12,6 +12,7 @@ import { SettingsAPI } from 'api';
 import ContentLoading from 'components/ContentLoading';
 import InstanceDetail from './InstanceDetail';
 import InstancePeerList from './InstancePeers';
+import InstanceEdit from './InstanceEdit';
 
 function Instance({ setBreadcrumb }) {
   const { me } = useConfig();
@@ -53,9 +54,8 @@ function Instance({ setBreadcrumb }) {
     request();
   }, [request]);
 
-  if (isK8s) {
-    tabsArray.push({ name: t`Peers`, link: `${match.url}/peers`, id: 1 });
-  }
+  tabsArray.push({ name: t`Peers`, link: `${match.url}/peers`, id: 1 });
+
   if (isLoading) {
     return <ContentLoading />;
   }
@@ -72,11 +72,12 @@ function Instance({ setBreadcrumb }) {
           <Route path="/instances/:id/details" key="details">
             <InstanceDetail isK8s={isK8s} setBreadcrumb={setBreadcrumb} />
           </Route>
-          {isK8s && (
-            <Route path="/instances/:id/peers" key="peers">
-              <InstancePeerList setBreadcrumb={setBreadcrumb} />
-            </Route>
-          )}
+          <Route path="/instances/:id/edit" key="edit">
+            <InstanceEdit setBreadcrumb={setBreadcrumb} />
+          </Route>
+          <Route path="/instances/:id/peers" key="peers">
+            <InstancePeerList setBreadcrumb={setBreadcrumb} />
+          </Route>
           <Route path="*" key="not-found">
             <ContentError isNotFound>
               {match.params.id && (

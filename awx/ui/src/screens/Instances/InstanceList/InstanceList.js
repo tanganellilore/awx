@@ -195,7 +195,7 @@ function InstanceList() {
                 onExpandAll={expandAll}
                 qsConfig={QS_CONFIG}
                 additionalControls={[
-                  ...(isK8s && me.is_superuser
+                  ...(me.is_superuser
                     ? [
                         <ToolbarAddButton
                           ouiaId="instances-add-button"
