@@ -20,8 +20,11 @@ function Instances() {
     }
     setBreadcrumbConfig({
       '/instances': t`Instances`,
+      '/instances/add': t`Create new Instance`,
       [`/instances/${instance.id}`]: `${instance.hostname}`,
       [`/instances/${instance.id}/details`]: t`Details`,
+      [`/instances/${instance.id}/peers`]: t`Peers`,
+      [`/instances/${instance.id}/edit`]: t`Edit Instance`,
     });
   }, []);
 
