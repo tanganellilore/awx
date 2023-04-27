@@ -7,6 +7,7 @@ import PersistentFilters from 'components/PersistentFilters';
 import { InstanceList } from './InstanceList';
 import Instance from './Instance';
 import InstanceAdd from './InstanceAdd';
+import InstanceEdit from './InstanceEdit';
 
 function Instances() {
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
@@ -33,7 +34,10 @@ function Instances() {
       <ScreenHeader streamType="instance" breadcrumbConfig={breadcrumbConfig} />
       <Switch>
         <Route path="/instances/add">
-          <InstanceAdd />
+          <InstanceAdd setBreadcrumb={buildBreadcrumbConfig} />
+        </Route>
+        <Route path="/instances/:id/edit" key="edit">
+          <InstanceEdit setBreadcrumb={buildBreadcrumbConfig} />
         </Route>
         <Route path="/instances/:id">
           <Instance setBreadcrumb={buildBreadcrumbConfig} />

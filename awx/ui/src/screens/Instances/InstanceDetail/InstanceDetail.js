@@ -116,6 +116,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
       setBreadcrumb(instance);
     }
   }, [instance, setBreadcrumb]);
+
   const { error: healthCheckError, request: fetchHealthCheck } = useRequest(
     useCallback(async () => {
       const { status } = await InstancesAPI.healthCheck(id);

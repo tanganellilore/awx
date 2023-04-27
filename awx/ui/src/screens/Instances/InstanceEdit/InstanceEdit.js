@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 
 import { t } from '@lingui/macro';
 import { useHistory, useParams, Link } from 'react-router-dom';
-
+import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
@@ -12,19 +12,17 @@ import InstanceForm from '../Shared/InstanceForm';
 
 function InstanceEdit({ setBreadcrumb }) {
   const history = useHistory();
-
   const { id } = useParams();
-  const [submitError, setSubmitError] = useState(null);
-  const detailsUrl = `/instances/${id}/details`;
+  const [formError, setFormError] = useState();
 
-  const isEdit = true;
+  const detailsUrl = `/instances/${id}/details`;
 
   const handleSubmit = async (values) => {
     try {
-      await InstancesAPI.update(instance.id, values);
+      await InstancesAPI.update(id, values);
       history.push(detailsUrl);
-    } catch (error) {
-      setSubmitError(error);
+    } catch (err) {
+      setFormError(err);
     }
   };
 
@@ -56,7 +54,9 @@ function InstanceEdit({ setBreadcrumb }) {
   }, [fetchDetail]);
 
   useEffect(() => {
-    setBreadcrumb(instance.hostname);
+    if (instance) {
+      setBreadcrumb(instance);
+    }
   }, [instance, setBreadcrumb]);
 
   if (isLoading) {
@@ -83,15 +83,17 @@ function InstanceEdit({ setBreadcrumb }) {
   }
 
   return (
-    <CardBody>
-      <InstanceForm
-        instance={instance}
-        onSubmit={handleSubmit}
-        submitError={submitError}
-        onCancel={handleCancel}
-        isEdit={isEdit}
-      />
-    </CardBody>
+    <PageSection>
+      <Card>
+        <InstanceForm
+          instance={instance}
+          isEdit
+          submitError={formError}
+          handleSubmit={handleSubmit}
+          handleCancel={handleCancel}
+        />
+      </Card>
+    </PageSection>
   );
 }
 

@@ -17,7 +17,7 @@ const INSTANCE_TYPES = [
   { id: 'hop', name: t`Hop` },
 ];
 
-function InstanceFormFields() {
+function InstanceFormFields({ isEdit }) {
   const [instanceTypeField, instanceTypeMeta, instanceTypeHelpers] = useField({
     name: 'node_type',
     validate: required(t`Set a value for this field`),
@@ -33,7 +33,6 @@ function InstanceFormFields() {
     },
     [setFieldValue]
   );
-
   return (
     <>
       <FormField
@@ -43,6 +42,7 @@ function InstanceFormFields() {
         type="text"
         validate={required(null)}
         isRequired
+        isDisabled={isEdit}
       />
       <FormField
         id="instance-description"
@@ -91,22 +91,22 @@ function InstanceFormFields() {
           }}
         />
       </FormGroup>
-      <InstancesLookup
-        // value={peers}
-        // onChange={setPeers}
-        helperTextInvalid={peersMeta.error}
-        isValid={!peersMeta.touched || !peersMeta.error}
-        onBlur={() => peersHelpers.setTouched()}
-        onChange={handlePeersUpdate}
-        value={peersField.value}
-        tooltip={t`Select the Peers Instances.`}
-        fieldName="peers"
-        formLabel={t`Peers`}
-        multiple
-        typePeers
-        id="peers"
-        isRequired
-      />
+      {!isEdit && (
+        <InstancesLookup
+          helperTextInvalid={peersMeta.error}
+          isValid={!peersMeta.touched || !peersMeta.error}
+          onBlur={() => peersHelpers.setTouched()}
+          onChange={handlePeersUpdate}
+          value={peersField.value}
+          tooltip={t`Select the Peers Instances.`}
+          fieldName="peers"
+          formLabel={t`Peers`}
+          multiple
+          typePeers
+          id="peers"
+          isRequired
+        />
+      )}
       <FormGroup fieldId="instance-option-checkboxes" label={t`Options`}>
         <CheckboxField
           id="enabled"
@@ -132,6 +132,7 @@ function InstanceFormFields() {
 
 function InstanceForm({
   instance = {},
+  isEdit = false,
   submitError,
   handleCancel,
   handleSubmit,
@@ -140,26 +141,26 @@ function InstanceForm({
     <CardBody>
       <Formik
         initialValues={{
-          hostname: '',
-          description: '',
-          node_type: 'execution',
-          node_state: 'installed',
-          listener_port: 27199,
-          enabled: true,
-          peers_from_control_nodes: true,
-          peers: [],
+          hostname: instance.hostname || '',
+          description: instance.description || '',
+          node_type: instance.node_type || 'execution',
+          node_state: instance.node_state || 'installed',
+          listener_port: instance.listener_port || 27199,
+          enabled: instance.enabled || true,
+          peers_from_control_nodes: instance.peers_from_control_nodes || true,
+          peers: instance.peers || [],
         }}
         onSubmit={(values) => {
           handleSubmit({
             ...values,
-            peers: values.peers.map((peer) => peer.hostname),
+            peers: values.peers.map((peer) => peer.hostname || peer),
           });
         }}
       >
         {(formik) => (
           <Form autoComplete="off" onSubmit={formik.handleSubmit}>
             <FormColumnLayout>
-              <InstanceFormFields instance={instance} />
+              <InstanceFormFields isEdit={isEdit} />
               <FormSubmitError error={submitError} />
               <FormActionGroup
                 onCancel={handleCancel}
