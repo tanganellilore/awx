@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import { t } from '@lingui/macro';
-import { Formik, useField } from 'formik';
+import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup, CardBody } from '@patternfly/react-core';
 import { FormColumnLayout } from 'components/FormLayout';
 import FormField, {
@@ -22,7 +22,17 @@ function InstanceFormFields() {
     name: 'node_type',
     validate: required(t`Set a value for this field`),
   });
-  const [instances, setInstances] = useState([]);
+
+  const { setFieldValue } = useFormikContext();
+
+  const [peersField, peersMeta, peersHelpers] = useField('peers');
+
+  const handlePeersUpdate = useCallback(
+    (value) => {
+      setFieldValue('peers', value);
+    },
+    [setFieldValue]
+  );
 
   return (
     <>
@@ -82,11 +92,19 @@ function InstanceFormFields() {
         />
       </FormGroup>
       <InstancesLookup
-        value={instances}
-        onChange={setInstances}
+        // value={peers}
+        // onChange={setPeers}
+        helperTextInvalid={peersMeta.error}
+        isValid={!peersMeta.touched || !peersMeta.error}
+        onBlur={() => peersHelpers.setTouched()}
+        onChange={handlePeersUpdate}
+        value={peersField.value}
         tooltip={t`Select the Peers Instances.`}
         fieldName="peers"
-        label={t`Peers`}
+        formLabel={t`Peers`}
+        multiple
+        typePeers
+        id="peers"
         isRequired
       />
       <FormGroup fieldId="instance-option-checkboxes" label={t`Options`}>
@@ -132,7 +150,10 @@ function InstanceForm({
           peers: [],
         }}
         onSubmit={(values) => {
-          handleSubmit(values);
+          handleSubmit({
+            ...values,
+            peers: values.peers.map((peer) => peer.hostname),
+          });
         }}
       >
         {(formik) => (

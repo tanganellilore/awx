@@ -86,9 +86,6 @@ function InstancePeerList({ setBreadcrumb }) {
     useExpanded(peers);
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(peers);
-  const { error, dismissError } = useDismissableError(
-    associateError || disassociateError
-  );
 
   const fetchInstancesToAssociate = useCallback(
     (params) =>
@@ -109,7 +106,9 @@ function InstancePeerList({ setBreadcrumb }) {
   } = useRequest(
     useCallback(
       async (instancesPeerToAssociate) => {
-        const selected_hostname = instancesPeerToAssociate.map(obj => obj.hostname);
+        const selected_hostname = instancesPeerToAssociate.map(
+          (obj) => obj.hostname
+        );
         const new_peers = [
           ...new Set([...instance.peers, ...selected_hostname]),
         ];
@@ -127,7 +126,7 @@ function InstancePeerList({ setBreadcrumb }) {
   } = useRequest(
     useCallback(async () => {
       const new_peers = [];
-      const selected_hostname = selected.map(obj => obj.hostname);
+      const selected_hostname = selected.map((obj) => obj.hostname);
       for (let i = 0; i < instance.peers.length; i++) {
         if (!selected_hostname.includes(instance.peers[i])) {
           new_peers.push(instance.peers[i]);
@@ -136,6 +135,10 @@ function InstancePeerList({ setBreadcrumb }) {
       await InstancesAPI.update(instance.id, { peers: new_peers });
       fetchPeers();
     }, [instance, selected, fetchPeers])
+  );
+
+  const { error, dismissError } = useDismissableError(
+    associateError || disassociateError
   );
 
   return (

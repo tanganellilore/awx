@@ -338,16 +338,15 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
                 onRemove={removeInstances}
               />
             )}
-          {config?.me?.is_superuser &&
-            isK8s && (isExecutionNode || isHopNode) && (
-              <Button
-                ouiaId="instance-detail-edit-button"
-                aria-label={t`edit`}
-                component={Link}
-                to={`/instances/${id}/edit`}
-              >
-                {t`Edit`}
-              </Button>
+          {config?.me?.is_superuser && isK8s && (isExecutionNode || isHopNode) && (
+            <Button
+              ouiaId="instance-detail-edit-button"
+              aria-label={t`edit`}
+              component={Link}
+              to={`/instances/${id}/edit`}
+            >
+              {t`Edit`}
+            </Button>
           )}
           {isExecutionNode && (
             <Tooltip content={t`Run a health check on the instance`}>

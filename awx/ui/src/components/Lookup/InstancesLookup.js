@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect } from 'react';
-import { arrayOf, string, func, bool } from 'prop-types';
+import { arrayOf, string, func, bool, oneOfType } from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { t } from '@lingui/macro';
-import { FormGroup } from '@patternfly/react-core';
+import { FormGroup, Chip } from '@patternfly/react-core';
 import { InstancesAPI } from 'api';
 import { Instance } from 'types';
 import { getSearchableKeys } from 'components/PaginatedTable';
-import { getQSConfig, parseQueryString } from 'util/qs';
+import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
 import useRequest from 'hooks/useRequest';
 import Popover from '../Popover';
 import OptionsList from '../OptionsList';
@@ -29,11 +29,15 @@ function InstancesLookup({
   required,
   history,
   fieldName,
+  multiple,
   validate,
   columns,
   isPromptableField,
   promptId,
   promptName,
+  formLabel,
+  typePeers,
+  instance_details,
 }) {
   const {
     result: { instances, count, relatedSearchableKeys, searchableKeys },
@@ -43,8 +47,21 @@ function InstancesLookup({
   } = useRequest(
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, history.location.search);
+      const peersFilter = {};
+      if (typePeers) {
+        peersFilter.not__node_type = ['control', 'hybrid'];
+        if (instance_details.id) {
+          peersFilter.not__id = instance_details.id;
+          peersFilter.not__hostname = instance_details.peers;
+        }
+      }
+
       const [{ data }, actionsResponse] = await Promise.all([
-        InstancesAPI.read(params),
+        InstancesAPI.read(
+          mergeParams(params, {
+            ...peersFilter,
+          })
+        ),
         InstancesAPI.readOptions(),
       ]);
       return {
@@ -55,7 +72,12 @@ function InstancesLookup({
         ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
-    }, [history.location]),
+    }, [
+      history.location,
+      typePeers,
+      instance_details.id,
+      instance_details.peers,
+    ]),
     {
       instances: [],
       count: 0,
@@ -71,23 +93,35 @@ function InstancesLookup({
   const renderLookup = () => (
     <>
       <Lookup
-        id="instances"
-        header={t`Instances`}
+        id={fieldName}
+        header={formLabel}
         value={value}
         onChange={onChange}
         onUpdate={fetchInstances}
         fieldName={fieldName}
         validate={validate}
         qsConfig={QS_CONFIG}
-        multiple
+        multiple={multiple}
         required={required}
         isLoading={isLoading}
+        label={formLabel}
+        renderItemChip={({ item, removeItem, canDelete }) => (
+          <Chip
+            key={item.id}
+            onClick={() => removeItem(item)}
+            isReadOnly={!canDelete}
+          >
+            {item.hostname}
+          </Chip>
+        )}
         renderOptionsList={({ state, dispatch, canDelete }) => (
           <OptionsList
             value={state.selectedItems}
             options={instances}
             optionCount={count}
             columns={columns}
+            header={formLabel}
+            displayKey="hostname"
             searchColumns={[
               {
                 name: t`Hostname`,
@@ -103,9 +137,9 @@ function InstancesLookup({
             ]}
             searchableKeys={searchableKeys}
             relatedSearchableKeys={relatedSearchableKeys}
-            multiple={state.multiple}
-            header={t`Instances`}
-            name="instances"
+            multiple={multiple}
+            label={formLabel}
+            name={fieldName}
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}
             selectItem={(item) => dispatch({ type: 'SELECT_ITEM', item })}
@@ -120,7 +154,7 @@ function InstancesLookup({
   return isPromptableField ? (
     <FieldWithPrompt
       fieldId={id}
-      label={t`Instances`}
+      label={formLabel}
       promptId={promptId}
       promptName={promptName}
       tooltip={tooltip}
@@ -130,7 +164,7 @@ function InstancesLookup({
   ) : (
     <FormGroup
       className={className}
-      label={t`Instances`}
+      label={formLabel}
       labelIcon={tooltip && <Popover content={tooltip} />}
       fieldId={id}
     >
@@ -147,8 +181,12 @@ InstancesLookup.propTypes = {
   className: string,
   required: bool,
   validate: func,
+  multiple: bool,
   fieldName: string,
   columns: arrayOf(Object),
+  formLabel: string,
+  instance_details: oneOfType([Object, null]),
+  typePeers: bool,
 };
 
 InstancesLookup.defaultProps = {
@@ -158,10 +196,20 @@ InstancesLookup.defaultProps = {
   required: false,
   validate: () => undefined,
   fieldName: 'instances',
-  columns: [{
-    key: 'hostname',
-    name: t`Hostname`
-  }]  
+  columns: [
+    {
+      key: 'hostname',
+      name: t`Hostname`,
+    },
+    {
+      key: 'node_type',
+      name: t`Node Type`,
+    },
+  ],
+  formLabel: t`Instances`,
+  instance_details: {},
+  multiple: true,
+  typePeers: false,
 };
 
 export default withRouter(InstancesLookup);
