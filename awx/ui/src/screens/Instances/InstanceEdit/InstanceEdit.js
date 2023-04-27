@@ -59,29 +59,6 @@ function InstanceEdit({ setBreadcrumb }) {
     }
   }, [instance, setBreadcrumb]);
 
-  if (isLoading) {
-    return (
-      <CardBody>
-        <ContentLoading />
-      </CardBody>
-    );
-  }
-
-  if (error) {
-    return (
-      <CardBody>
-        <ContentError error={error}>
-          {error?.response?.status === 404 && (
-            <span>
-              {t`Instance not found.`}{' '}
-              <Link to="/instances">{t`View all Instances.`}</Link>
-            </span>
-          )}
-        </ContentError>
-      </CardBody>
-    );
-  }
-
   return (
     <PageSection>
       <Card>

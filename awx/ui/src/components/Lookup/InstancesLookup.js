@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { arrayOf, string, func, bool, oneOfType } from 'prop-types';
+import { arrayOf, string, func, bool, oneOfType, object } from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { t } from '@lingui/macro';
 import { FormGroup, Chip } from '@patternfly/react-core';
@@ -185,7 +185,7 @@ InstancesLookup.propTypes = {
   fieldName: string,
   columns: arrayOf(Object),
   formLabel: string,
-  instance_details: oneOfType([Object, null]),
+  instance_details: object,
   typePeers: bool,
 };
 
